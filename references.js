@@ -6,7 +6,7 @@ function saveReference() {
     const formData = new FormData(form);
 
     const tournament = formData.get('tournament');
-    const date = formData.get('date');
+    const date = formatDate(formData.get('date'));
     const ageGroup = formData.get('ageGroup');
     const discipline = formData.get('discipline');
     const startNumber = formData.get('startNumber');
@@ -30,6 +30,15 @@ function saveReference() {
 
     updateReferenceTable();
     form.reset();
+}
+
+// Function to format date to DD.MM.YYYY
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
 }
 
 // Function to update the reference table
@@ -113,14 +122,13 @@ function importFromExcel() {
                 }
                 referenceData[row[4]] = {
                     tournament: row[0],
-                    date: row[1],
+                    date: formatDate(row[1]),
                     ageGroup: row[2],
                     discipline: row[3],
                     club: row[5],
                     starterName: row[6]
                 };
                 progressBar.value = (i / worksheet.length) * 100;
-
             }
 
             progressBar.style.display = 'none';
