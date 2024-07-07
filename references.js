@@ -37,21 +37,24 @@ function importData() {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const contents = e.target.result;
-            const rows = contents.split('\n');
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+            
             referenceData = {}; // Reset reference data
-            rows.forEach(row => {
-                const cols = row.split(',');
-                if (cols.length >= 7) { // Ensure all required columns are present
-                    const key = cols[4].trim(); // Assuming start number as the key
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip header row
+                if (row.length >= 7) { // Ensure all required columns are present
+                    const key = row[4].toString().trim(); // Assuming start number as the key
                     referenceData[key] = {
-                        tournament: cols[0].trim(),
-                        date: cols[1].trim(),
-                        ageGroup: cols[2].trim(),
-                        discipline: cols[3].trim(),
-                        startNumber: cols[4].trim(),
-                        club: cols[5].trim(),
-                        starterName: cols[6].trim()
+                        tournament: row[0].toString().trim(),
+                        date: row[1].toString().trim(),
+                        ageGroup: row[2].toString().trim(),
+                        discipline: row[3].toString().trim(),
+                        startNumber: row[4].toString().trim(),
+                        club: row[5].toString().trim(),
+                        starterName: row[6].toString().trim()
                     };
                 }
             });
@@ -59,7 +62,7 @@ function importData() {
             populateReferenceTable();
             fileInput.value = ''; // Clear the file input
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
     }
 }
 
