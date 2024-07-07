@@ -1,17 +1,17 @@
 let monitoringData = [];
-let referenceData = [];
+let importData = [];
 
-// Fetch reference data and populate tournaments on page load
-function fetchReferenceData() {
-    const savedReferenceData = localStorage.getItem('referenceData');
-    if (savedReferenceData) {
-        referenceData = JSON.parse(savedReferenceData);
+// Fetch import data and populate tournaments on page load
+function fetchImportData() {
+    const savedImportData = localStorage.getItem('importData');
+    if (savedImportData) {
+        importData = JSON.parse(savedImportData);
         populateTournaments();
     }
 }
 
 function populateTournaments() {
-    const tournaments = [...new Set(referenceData.map(item => item.tournament))];
+    const tournaments = [...new Set(importData.map(item => item.Turnier))];
     const tournamentSelect = document.getElementById('tournament');
     tournamentSelect.innerHTML = '<option value="">Wählen...</option>'; // Reset options
     tournaments.forEach(tournament => {
@@ -24,7 +24,7 @@ function populateTournaments() {
 
 function updateAgeGroups() {
     const tournament = document.getElementById('tournament').value;
-    const ageGroups = [...new Set(referenceData.filter(item => item.tournament === tournament).map(item => item.ageGroup))];
+    const ageGroups = [...new Set(importData.filter(item => item.Turnier === tournament).map(item => item.Altersklasse))];
     const ageGroupSelect = document.getElementById('ageGroup');
     ageGroupSelect.innerHTML = '<option value="">Wählen...</option>'; // Reset options
     ageGroups.forEach(ageGroup => {
@@ -39,7 +39,7 @@ function updateAgeGroups() {
 function updateDisciplines() {
     const tournament = document.getElementById('tournament').value;
     const ageGroup = document.getElementById('ageGroup').value;
-    const disciplines = [...new Set(referenceData.filter(item => item.tournament === tournament && item.ageGroup === ageGroup).map(item => item.discipline))];
+    const disciplines = [...new Set(importData.filter(item => item.Turnier === tournament && item.Altersklasse === ageGroup).map(item => item.Disziplin))];
     const disciplineSelect = document.getElementById('discipline');
     disciplineSelect.innerHTML = '<option value="">Wählen...</option>'; // Reset options
     disciplines.forEach(discipline => {
@@ -55,7 +55,7 @@ function updateStartNumbers() {
     const tournament = document.getElementById('tournament').value;
     const ageGroup = document.getElementById('ageGroup').value;
     const discipline = document.getElementById('discipline').value;
-    const startNumbers = [...new Set(referenceData.filter(item => item.tournament === tournament && item.ageGroup === ageGroup && item.discipline === discipline).map(item => item.startNumber))];
+    const startNumbers = [...new Set(importData.filter(item => item.Turnier === tournament && item.Altersklasse === ageGroup && item.Disziplin === discipline).map(item => item.Startnr))];
     const startNumberSelect = document.getElementById('startNumber');
     startNumberSelect.innerHTML = '<option value="">Wählen...</option>'; // Reset options
     startNumbers.forEach(startNumber => {
@@ -72,11 +72,11 @@ function updateStarterInfo() {
     const ageGroup = document.getElementById('ageGroup').value;
     const discipline = document.getElementById('discipline').value;
     const startNumber = document.getElementById('startNumber').value;
-    const starterInfo = referenceData.find(item => item.tournament === tournament && item.ageGroup === ageGroup && item.discipline === discipline && item.startNumber === startNumber);
+    const starterInfo = importData.find(item => item.Turnier === tournament && item.Altersklasse === ageGroup && item.Disziplin === discipline && item.Startnr === startNumber);
 
     if (starterInfo) {
-        document.getElementById('club').value = starterInfo.club;
-        document.getElementById('starterName').value = starterInfo.starterName;
+        document.getElementById('club').value = starterInfo.Verein;
+        document.getElementById('starterName').value = starterInfo.Name;
     }
 }
 
@@ -114,5 +114,5 @@ function toggleMenu() {
 }
 
 window.onload = () => {
-    fetchReferenceData();
+    fetchImportData();
 };
