@@ -34,6 +34,7 @@ function updateAgeGroups() {
         ageGroupSelect.appendChild(option);
     });
     ageGroupSelect.disabled = ageGroups.length === 0;
+    document.getElementById('ageGroup').disabled = false; // Enable the age group select
 }
 
 function updateDisciplines() {
@@ -49,6 +50,7 @@ function updateDisciplines() {
         disciplineSelect.appendChild(option);
     });
     disciplineSelect.disabled = disciplines.length === 0;
+    document.getElementById('discipline').disabled = false; // Enable the discipline select
 }
 
 function updateStartNumbers() {
@@ -65,6 +67,7 @@ function updateStartNumbers() {
         startNumberSelect.appendChild(option);
     });
     startNumberSelect.disabled = startNumbers.length === 0;
+    document.getElementById('startNumber').disabled = false; // Enable the start number select
 }
 
 function updateStarterInfo() {
@@ -77,6 +80,7 @@ function updateStarterInfo() {
     if (starterInfo) {
         document.getElementById('club').value = starterInfo.Verein;
         document.getElementById('starterName').value = starterInfo.Name;
+
     }
 }
 
