@@ -20,6 +20,22 @@
     </div>
     <div class="container">
         <h1>Ergebnisse</h1>
+        <div class="filter-group">
+            <label for="filterTournament">Turnier:</label>
+            <select id="filterTournament" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterAgeGroup">Altersklasse:</label>
+            <select id="filterAgeGroup" onchange="applyFilters()" disabled>
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterDiscipline">Disziplin:</label>
+            <select id="filterDiscipline" onchange="applyFilters()" disabled>
+                <option value="">Alle</option>
+            </select>
+        </div>
         <div class="pagination">
             <button id="prevPage" onclick="prevPage()">⬅️</button>
             <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>

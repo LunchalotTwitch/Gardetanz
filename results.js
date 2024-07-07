@@ -1,4 +1,5 @@
 let monitoringData = [];
+let filteredData = [];
 let currentPage = 1; // Aktuelle Seite
 const recordsPerPage = 20; // Anzahl der Datensätze pro Seite
 
@@ -6,13 +7,70 @@ function fetchMonitoringData() {
     const savedData = localStorage.getItem('monitoringData');
     if (savedData) {
         monitoringData = JSON.parse(savedData);
-        sortMonitoringData();
-        renderResultsTable();
+        populateFilters();
+        applyFilters();
     }
 }
 
-function sortMonitoringData() {
-    monitoringData.sort((a, b) => {
+function populateFilters() {
+    const tournaments = [...new Set(monitoringData.map(item => item.tournament))];
+    const tournamentSelect = document.getElementById('filterTournament');
+    tournaments.forEach(tournament => {
+        const option = document.createElement('option');
+        option.value = tournament;
+        option.textContent = tournament;
+        tournamentSelect.appendChild(option);
+    });
+}
+
+function applyFilters() {
+    const tournament = document.getElementById('filterTournament').value;
+    const ageGroupSelect = document.getElementById('filterAgeGroup');
+    const disciplineSelect = document.getElementById('filterDiscipline');
+
+    ageGroupSelect.innerHTML = '<option value="">Alle</option>';
+    disciplineSelect.innerHTML = '<option value="">Alle</option>';
+    ageGroupSelect.disabled = !tournament;
+    disciplineSelect.disabled = true;
+
+    let data = monitoringData;
+
+    if (tournament) {
+        data = data.filter(item => item.tournament === tournament);
+        const ageGroups = [...new Set(data.map(item => item.ageGroup))];
+        ageGroups.forEach(ageGroup => {
+            const option = document.createElement('option');
+            option.value = ageGroup;
+            option.textContent = ageGroup;
+            ageGroupSelect.appendChild(option);
+        });
+    }
+
+    const ageGroup = ageGroupSelect.value;
+    if (ageGroup) {
+        data = data.filter(item => item.ageGroup === ageGroup);
+        disciplineSelect.disabled = false;
+        const disciplines = [...new Set(data.map(item => item.discipline))];
+        disciplines.forEach(discipline => {
+            const option = document.createElement('option');
+            option.value = discipline;
+            option.textContent = discipline;
+            disciplineSelect.appendChild(option);
+        });
+    }
+
+    const discipline = disciplineSelect.value;
+    if (discipline) {
+        data = data.filter(item => item.discipline === discipline);
+    }
+
+    filteredData = data;
+    sortFilteredData();
+    renderResultsTable();
+}
+
+function sortFilteredData() {
+    filteredData.sort((a, b) => {
         const totalA = a.scores.reduce((sum, score) => sum + score, 0) - Math.max(...a.scores) - Math.min(...a.scores);
         const totalB = b.scores.reduce((sum, score) => sum + score, 0) - Math.max(...b.scores) - Math.min(...b.scores);
         return totalB - totalA;
@@ -24,9 +82,9 @@ function renderResultsTable() {
     tableBody.innerHTML = '';
 
     const startIndex = (currentPage - 1) * recordsPerPage;
-    const endIndex = Math.min(startIndex + recordsPerPage, monitoringData.length);
+    const endIndex = Math.min(startIndex + recordsPerPage, filteredData.length);
 
-    monitoringData.slice(startIndex, endIndex).forEach((entry, index) => {
+    filteredData.slice(startIndex, endIndex).forEach((entry, index) => {
         const row = document.createElement('tr');
         const total = entry.scores.reduce((sum, score) => sum + score, 0);
         const points = total - Math.max(...entry.scores) - Math.min(...entry.scores);
@@ -52,9 +110,9 @@ function renderResultsTable() {
     });
 
     document.getElementById('currentPage').innerText = currentPage;
-    document.getElementById('totalPages').innerText = Math.ceil(monitoringData.length / recordsPerPage);
+    document.getElementById('totalPages').innerText = Math.ceil(filteredData.length / recordsPerPage);
     document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage === Math.ceil(monitoringData.length / recordsPerPage);
+    document.getElementById('nextPage').disabled = currentPage === Math.ceil(filteredData.length / recordsPerPage);
 }
 
 function prevPage() {
@@ -65,7 +123,7 @@ function prevPage() {
 }
 
 function nextPage() {
-    if (currentPage < Math.ceil(monitoringData.length / recordsPerPage)) {
+    if (currentPage < Math.ceil(filteredData.length / recordsPerPage)) {
         currentPage++;
         renderResultsTable();
     }

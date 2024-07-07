@@ -64,10 +64,14 @@ h1, h2 {
     text-align: center;
 }
 
-.form-group {
+.form-group, .filter-group {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+}
+
+.filter-group label, .filter-group select {
+    margin-right: 10px;
 }
 
 .scores {
@@ -127,14 +131,17 @@ th {
 
 .gold {
     background-color: gold;
+    color: black;
 }
 
 .silver {
     background-color: silver;
+    color: black;
 }
 
 .bronze {
     background-color: #cd7f32;
+    color: black;
 }
 
 .pagination {
@@ -168,7 +175,7 @@ th {
 }
 
 @media (max-width: 600px) {
-    .form-group {
+    .form-group, .filter-group {
         flex-direction: column;
     }
     .scores {
