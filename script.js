@@ -213,7 +213,7 @@ function updateResultsTable() {
                (!filterDiscipline || entry.discipline === filterDiscipline);
     });
 
-    if (filteredEntries.length > 0) {
+    if (filterTournament && filterAgeGroup && filterDiscipline) {
         resultsTitle.style.display = 'block';
         resultsTable.style.display = 'table';
     } else {
