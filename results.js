@@ -1,142 +1,32 @@
-let referenceData = {}; // Object to store reference data
-let entries = []; // Array to store entries
+let monitoringData = [];
 
-function fetchReferenceData() {
-    const savedData = localStorage.getItem('referenceData');
+function fetchMonitoringData() {
+    const savedData = localStorage.getItem('monitoringData');
     if (savedData) {
-        referenceData = JSON.parse(savedData);
+        monitoringData = JSON.parse(savedData);
+        renderResultsTable();
     }
 }
 
-function fetchEntries() {
-    const savedEntries = localStorage.getItem('entries');
-    if (savedEntries) {
-        entries = JSON.parse(savedEntries);
-    }
-}
-
-function populateFilters() {
-    const tournaments = new Set();
-    const ageGroups = new Set();
-    const disciplines = new Set();
-    const clubs = new Set();
-    const dates = new Set();
-
-    for (const key in referenceData) {
-        const reference = referenceData[key];
-        tournaments.add(reference.tournament);
-        ageGroups.add(reference.ageGroup);
-        disciplines.add(reference.discipline);
-        clubs.add(reference.club);
-        dates.add(reference.date);
-    }
-
-    const tournamentSelect = document.getElementById('filterTournament');
-    const ageGroupSelect = document.getElementById('filterAgeGroup');
-    const disciplineSelect = document.getElementById('filterDiscipline');
-    const clubSelect = document.getElementById('filterClub');
-    const dateSelect = document.getElementById('filterDate');
-
-    tournaments.forEach(tournament => {
-        const option = document.createElement('option');
-        option.value = tournament;
-        option.text = tournament;
-        tournamentSelect.appendChild(option);
-    });
-
-    ageGroups.forEach(ageGroup => {
-        const option = document.createElement('option');
-        option.value = ageGroup;
-        option.text = ageGroup;
-        ageGroupSelect.appendChild(option);
-    });
-
-    disciplines.forEach(discipline => {
-        const option = document.createElement('option');
-        option.value = discipline;
-        option.text = discipline;
-        disciplineSelect.appendChild(option);
-    });
-
-    clubs.forEach(club => {
-        const option = document.createElement('option');
-        option.value = club;
-        option.text = club;
-        clubSelect.appendChild(option);
-    });
-
-    dates.forEach(date => {
-        const option = document.createElement('option');
-        option.value = date;
-        option.text = date;
-        dateSelect.appendChild(option);
-    });
-}
-
-function updateResultsTable() {
-    const filterDate = document.getElementById('filterDate').value;
-    const filterTournament = document.getElementById('filterTournament').value;
-    const filterAgeGroup = document.getElementById('filterAgeGroup').value;
-    const filterDiscipline = document.getElementById('filterDiscipline').value;
-    const filterClub = document.getElementById('filterClub').value;
-
+function renderResultsTable() {
     const tableBody = document.querySelector('#resultsTable tbody');
     tableBody.innerHTML = '';
 
-    const filteredKeys = Object.keys(referenceData).filter(key => {
-        const reference = referenceData[key];
-        return (!filterDate || reference.date === filterDate) &&
-               (!filterTournament || reference.tournament === filterTournament) &&
-               (!filterAgeGroup || reference.ageGroup === filterAgeGroup) &&
-               (!filterDiscipline || reference.discipline === filterDiscipline) &&
-               (!filterClub || reference.club === filterClub);
-    });
-
-    const filteredEntries = filteredKeys.map(key => {
-        const reference = referenceData[key];
-        const entry = entries.find(e => e.startNumber === key) || {
-            scores: [],
-            pointScore: 0,
-            totalScore: 0
-        };
-
-        return {
-            ...reference,
-            ...entry
-        };
-    });
-
-    filteredEntries.sort((a, b) => b.pointScore - a.pointScore);
-
-    filteredEntries.forEach((entry, index) => {
+    monitoringData.forEach((entry, index) => {
         const row = document.createElement('tr');
 
-        const scoresHtml = Array.from({ length: 7 }, (_, i) => {
-            const score = entry.scores[i] || '';
-            const isLowest = score === entry.lowestScore;
-
-            const isHighest = score === entry.highestScore;
-            const className = isLowest || isHighest ? 'highlight' : '';
-            return `<td class="${className}">${score}</td>`;
-        }).join('');
-
-        let placeClass = '';
-        if (index === 0) placeClass = 'gold';
-        else if (index === 1) placeClass = 'silver';
-        else if (index === 2) placeClass = 'bronze';
+        const total = entry.scores.reduce((sum, score) => sum + score, 0);
+        const points = total - Math.max(...entry.scores) - Math.min(...entry.scores);
 
         row.innerHTML = `
-            <td class="${placeClass}">${index + 1}</td>
-            <td>${entry.date}</td>
-            <td>${entry.tournament}</td>
-            <td>${entry.ageGroup}</td>
-            <td>${entry.discipline}</td>
+            <td>${index + 1}</td>
+            <td>${points}</td>
+            <td>${total}</td>
+            <td>${Math.min(...entry.scores)}, ${Math.max(...entry.scores)}</td>
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
-            ${scoresHtml}
-            <td>${entry.pointScore}</td>
-            <td>${entry.totalScore}</td>
+            <td>${entry.scores.join(', ')}</td>
         `;
 
         tableBody.appendChild(row);
@@ -149,8 +39,5 @@ function toggleMenu() {
 }
 
 window.onload = () => {
-    fetchReferenceData();
-    fetchEntries();
-    populateFilters();
-    updateResultsTable();
+    fetchMonitoringData();
 };

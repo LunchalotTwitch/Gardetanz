@@ -15,61 +15,26 @@
             <li><a href="index.html">Monitoringseite</a></li>
             <li><a href="references.html">Referenzseite</a></li>
             <li><a href="results.html">Ergebnisse</a></li>
-			<li><a href="dataimport.html">Datenimport</a></li>
+            <li><a href="dataimport.html">Datenimport</a></li>
         </ul>
     </div>
     <div class="container">
         <h1>Ergebnisse</h1>
-        <form id="filterForm">
-            <label for="filterDate">Datum:</label>
-            <input type="date" id="filterDate" name="filterDate" onchange="updateResultsTable()">
-
-            <label for="filterTournament">Turnier:</label>
-            <select id="filterTournament" name="filterTournament" onchange="updateResultsTable()">
-                <option value="">Alle</option>
-            </select>
-
-            <label for="filterAgeGroup">Altersklasse:</label>
-            <select id="filterAgeGroup" name="filterAgeGroup" onchange="updateResultsTable()">
-                <option value="">Alle</option>
-            </select>
-
-            <label for="filterDiscipline">Disziplin:</label>
-            <select id="filterDiscipline" name="filterDiscipline" onchange="updateResultsTable()">
-                <option value="">Alle</option>
-            </select>
-
-            <label for="filterClub">Verein:</label>
-            <select id="filterClub" name="filterClub" onchange="updateResultsTable()">
-                <option value="">Alle</option>
-            </select>
-        </form>
-
-        <h2>Gesamtliste</h2>
         <table id="resultsTable">
             <thead>
                 <tr>
                     <th>Platz</th>
-                    <th>Datum</th>
-                    <th>Turnier</th>
-                    <th>Altersklasse</th>
-                    <th>Disziplin</th>
+                    <th>Punktzahl</th>
+                    <th>Gesamt</th>
+                    <th>Streicher</th>
                     <th>Startnummer</th>
                     <th>Verein</th>
                     <th>Name</th>
-                    <th>WR1</th>
-                    <th>WR2</th>
-                    <th>WR3</th>
-                    <th>WR4</th>
-                    <th>WR5</th>
-                    <th>WR6</th>
-                    <th>WR7</th>
-                    <th>Punktzahl</th>
-                    <th>Gesamt</th>
+                    <th>Wertungen</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Einträge werden hier hinzugefügt -->
+                <!-- Ergebnisse werden hier hinzugefügt -->
             </tbody>
         </table>
     </div>
