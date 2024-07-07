@@ -20,17 +20,28 @@
     </div>
     <div class="container">
         <h1>Ergebnisse</h1>
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">⬅️</button>
+            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
+            <button id="nextPage" onclick="nextPage()">➡️</button>
+        </div>
         <table id="resultsTable">
             <thead>
                 <tr>
                     <th>Platz</th>
                     <th>Punktzahl</th>
                     <th>Gesamt</th>
+                    <th>WR1</th>
+                    <th>WR2</th>
+                    <th>WR3</th>
+                    <th>WR4</th>
+                    <th>WR5</th>
+                    <th>WR6</th>
+                    <th>WR7</th>
                     <th>Streicher</th>
                     <th>Startnummer</th>
                     <th>Verein</th>
                     <th>Name</th>
-                    <th>Wertungen</th>
                 </tr>
             </thead>
             <tbody>

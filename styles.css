@@ -9,6 +9,8 @@ body {
 .container {
     max-width: 800px;
     margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .menu-button {
@@ -119,6 +121,22 @@ th {
     background-color: #333;
 }
 
+.streicher {
+    color: red;
+}
+
+.gold {
+    background-color: gold;
+}
+
+.silver {
+    background-color: silver;
+}
+
+.bronze {
+    background-color: #cd7f32;
+}
+
 .pagination {
     display: flex;
     justify-content: center;
@@ -155,5 +173,8 @@ th {
     }
     .scores {
         flex-direction: column;
+    }
+    .container {
+        padding: 5px;
     }
 }
