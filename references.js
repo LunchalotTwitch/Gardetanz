@@ -49,7 +49,7 @@ function updateReferenceTable() {
             <td>${startNumber}</td>
             <td>${ref.club}</td>
             <td>${ref.starterName}</td>
-            <td><button onclick="deleteReference('${startNumber}')">-</button></td>
+            <td><button class="delete-button" onclick="deleteReference('${startNumber}')">-</button></td>
         `;
 
         tableBody.appendChild(row);
@@ -60,6 +60,13 @@ function updateReferenceTable() {
 function deleteReference(startNumber) {
     delete referenceData[startNumber];
     updateReferenceTable();
+}
+
+// Function to delete all references
+function deleteAllReferences() {
+    referenceData = {};
+    updateReferenceTable();
+    alert("Referenzliste wurde gelöscht.");
 }
 
 // Function to save reference data to localStorage
@@ -113,24 +120,13 @@ function importFromExcel() {
                     starterName: row[6]
                 };
                 progressBar.value = (i / worksheet.length) * 100;
+
             }
 
             progressBar.style.display = 'none';
             updateReferenceTable();
         };
         reader.readAsArrayBuffer(file);
-    }
-}
-
-// Function to prompt for password and delete references
-function promptDeleteReferences() {
-    const password = prompt("Bitte geben Sie das Passwort ein, um die Referenzliste zu löschen:");
-    if (password === "922766") {
-        referenceData = {};
-        updateReferenceTable();
-        alert("Referenzliste wurde gelöscht.");
-    } else {
-        alert("Falsches Passwort. Die Referenzliste wurde nicht gelöscht.");
     }
 }
 
