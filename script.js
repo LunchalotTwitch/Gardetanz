@@ -23,6 +23,14 @@ function fetchReferenceData() {
     }
 }
 
+// Function to fetch entries from localStorage
+function fetchEntries() {
+    const savedEntries = localStorage.getItem('entries');
+    if (savedEntries) {
+        entries = JSON.parse(savedEntries);
+    }
+}
+
 // Function to update age groups based on selected tournament
 function updateAgeGroups() {
     const tournament = document.getElementById('tournament').value;
@@ -49,6 +57,8 @@ function updateAgeGroups() {
         ageGroupSelect.disabled = true;
         document.getElementById('discipline').disabled = true;
         document.getElementById('startNumber').disabled = true;
+        document.getElementById('club').value = '';
+        document.getElementById('starterName').value = '';
     }
 }
 
@@ -78,6 +88,8 @@ function updateDisciplines() {
     } else {
         disciplineSelect.disabled = true;
         document.getElementById('startNumber').disabled = true;
+        document.getElementById('club').value = '';
+        document.getElementById('starterName').value = '';
     }
 }
 
@@ -104,6 +116,8 @@ function updateStartNumbers() {
         startNumberSelect.disabled = false;
     } else {
         startNumberSelect.disabled = true;
+        document.getElementById('club').value = '';
+        document.getElementById('starterName').value = '';
     }
 }
 
@@ -118,6 +132,16 @@ function updateStarterInfo() {
         document.getElementById('club').value = '';
         document.getElementById('starterName').value = '';
     }
+}
+
+// Function to check if entry already exists
+function entryExists(entry) {
+    return entries.some(existingEntry => 
+        existingEntry.tournament === entry.tournament &&
+        existingEntry.ageGroup === entry.ageGroup &&
+        existingEntry.discipline === entry.discipline &&
+        existingEntry.startNumber === entry.startNumber
+    );
 }
 
 // Function to save entry
@@ -137,6 +161,11 @@ function saveEntry() {
         scores: []
     };
 
+    if (entryExists(entry)) {
+        alert("Dieser Eintrag wurde bereits hinzugefügt.");
+        return;
+    }
+
     formData.getAll('score').forEach(score => {
         if (score) {
             entry.scores.push(parseInt(score));
@@ -150,6 +179,7 @@ function saveEntry() {
     entry.totalScore = entry.scores.reduce((a, b) => a + b, 0);
 
     entries.push(entry);
+    saveEntriesToLocalStorage();
     updateResultsTable();
 
     // Retain tournament, ageGroup, and discipline; increment startNumber
@@ -158,6 +188,11 @@ function saveEntry() {
         document.getElementById('startNumber').value = nextStartNumber;
         updateStarterInfo();
     }
+}
+
+// Function to save entries to localStorage
+function saveEntriesToLocalStorage() {
+    localStorage.setItem('entries', JSON.stringify(entries));
 }
 
 // Function to update the results table
@@ -216,8 +251,9 @@ function toggleMenu() {
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Fetch reference data on page load
+// Fetch reference data and entries on page load
 window.onload = () => {
     fetchReferenceData();
+    fetchEntries();
     updateResultsTable();
 };
