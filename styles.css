@@ -64,14 +64,10 @@ h1, h2 {
     text-align: center;
 }
 
-.form-group, .filter-group {
+.form-group {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-}
-
-.filter-group label, .filter-group select {
-    margin-right: 10px;
 }
 
 .scores {
@@ -125,61 +121,8 @@ th {
     background-color: #333;
 }
 
-.streicher {
-    color: red;
-}
-
-.gold {
-    background-color: gold;
-    color: black;
-}
-
-.silver {
-    background-color: silver;
-    color: black;
-}
-
-.bronze {
-    background-color: #cd7f32;
-    color: black;
-}
-
-.strikethrough {
-    text-decoration: line-through;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.pagination button {
-    background-color: #444; /* Neutral background color */
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.pagination button:hover:not(:disabled) {
-    background-color: #555; /* Slightly lighter color on hover */
-}
-
-.pagination button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
-}
-
-.pagination span {
-    margin: 0 10px;
-    font-size: 1em;
-}
-
 @media (max-width: 600px) {
-    .form-group, .filter-group {
+    .form-group {
         flex-direction: column;
     }
     .scores {

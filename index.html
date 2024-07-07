@@ -22,20 +22,20 @@
         <h1>Turnier Monitoring</h1>
         <form id="entryForm">
             <label for="tournament">Turnier:</label>
-            <select id="tournament" name="tournament" onchange="updateAgeGroups(); updateResultsTable();">
+            <select id="tournament" name="tournament" onchange="updateAgeGroups();">
                 <option value="">Wählen...</option>
             </select>
 
             <div class="form-group">
                 <div>
                     <label for="ageGroup">Altersklasse:</label>
-                    <select id="ageGroup" name="ageGroup" onchange="updateDisciplines(); updateResultsTable();" disabled>
+                    <select id="ageGroup" name="ageGroup" onchange="updateDisciplines();" disabled>
                         <option value="">Wählen...</option>
                     </select>
                 </div>
                 <div>
                     <label for="discipline">Disziplin:</label>
-                    <select id="discipline" name="discipline" onchange="updateStartNumbers(); updateResultsTable();" disabled>
+                    <select id="discipline" name="discipline" onchange="updateStartNumbers();" disabled>
                         <option value="">Wählen...</option>
                     </select>
                 </div>
@@ -94,25 +94,6 @@
 
             <button type="button" onclick="saveEntry()">Eintrag speichern</button>
         </form>
-        
-        <h2 id="resultsTitle" style="display: none;">Gesamtliste</h2>
-        <table id="resultsTable" style="display: none;">
-            <thead>
-                <tr>
-                    <th>Platz</th>
-                    <th>Punktzahl</th>
-                    <th>Gesamt</th>
-                    <th>Streicher</th>
-                    <th>Startnummer</th>
-                    <th>Verein</th>
-                    <th>Name</th>
-                    <th>Wertungen</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Einträge werden hier hinzugefügt -->
-            </tbody>
-        </table>
     </div>
     <script src="script.js"></script>
 </body>
