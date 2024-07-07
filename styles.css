@@ -121,12 +121,16 @@ th {
 }
 
 .pagination button {
-    background-color: #007BFF;
+    background-color: #444; /* Neutral background color */
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     font-size: 1em;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #555; /* Slightly lighter color on hover */
 }
 
 .pagination button:disabled {

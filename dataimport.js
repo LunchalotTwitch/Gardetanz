@@ -54,7 +54,7 @@ function importExcelData() {
             importData = []; // Reset import data
             rows.forEach((row, index) => {
                 if (index === 0) return; // Skip header row
-                if (row.length >= 7) { // Ensure all required columns are present
+                if (row.length >= 7 && importData.length < 500) { // Ensure all required columns are present and limit to 500 records
                     importData.push({
                         tournament: row[0].toString().trim(),
                         date: row[1].toString().trim(),
