@@ -1,57 +1,38 @@
-let importData = [];
-let currentPage = 1;
-const recordsPerPage = 20;
+let importData = []; // Array to store imported data
+let currentPage = 1; // Current page
+const recordsPerPage = 20; // Records per page
 
-document.getElementById('fileInput').addEventListener('change', handleFileSelect);
-
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, {type: 'array'});
-
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-        
-        const keys = json[0];
-        importData = json.slice(1).map(row => {
-            let obj = {};
-            row.forEach((cell, i) => {
-                obj[keys[i]] = cell;
-            });
-            return obj;
-        });
-
-        localStorage.setItem('importData', JSON.stringify(importData));
-        displayData();
-    };
-
-    reader.readAsArrayBuffer(file);
+function fetchImportData() {
+    const savedData = localStorage.getItem('importData');
+    if (savedData) {
+        importData = JSON.parse(savedData);
+        renderTable();
+    }
 }
 
-function displayData() {
-    const tableBody = document.querySelector('#importedData tbody');
+function renderTable() {
+    const tableBody = document.querySelector('#importTable tbody');
     tableBody.innerHTML = '';
 
     const startIndex = (currentPage - 1) * recordsPerPage;
     const endIndex = Math.min(startIndex + recordsPerPage, importData.length);
 
-    importData.slice(startIndex, endIndex).forEach(item => {
+    for (let i = startIndex; i < endIndex; i++) {
+        const data = importData[i];
         const row = document.createElement('tr');
+
         row.innerHTML = `
-            <td>${item.Turnier}</td>
-            <td>${item.Datum}</td>
-            <td>${item.Altersklasse}</td>
-            <td>${item.Disziplin}</td>
-            <td>${item.Startnummer}</td>
-            <td>${item.Verein}</td>
-            <td>${item['Name des Starters']}</td>
+            <td>${data.tournament}</td>
+            <td>${data.date}</td>
+            <td>${data.ageGroup}</td>
+            <td>${data.discipline}</td>
+            <td>${data.startNumber}</td>
+            <td>${data.club}</td>
+            <td>${data.starterName}</td>
         `;
+
         tableBody.appendChild(row);
-    });
+    }
 
     document.getElementById('currentPage').innerText = currentPage;
     document.getElementById('totalPages').innerText = Math.ceil(importData.length / recordsPerPage);
@@ -59,30 +40,59 @@ function displayData() {
     document.getElementById('nextPage').disabled = currentPage === Math.ceil(importData.length / recordsPerPage);
 }
 
+function importExcelData() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            importData = []; // Reset import data
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip header row
+                if (row.length >= 7 && importData.length < 500) { // Ensure all required columns are present and limit to 500 records
+                    importData.push({
+                        tournament: row[0].toString().trim(),
+                        date: row[1].toString().trim(),
+                        ageGroup: row[2].toString().trim(),
+                        discipline: row[3].toString().trim(),
+                        startNumber: row[4].toString().trim(),
+                        club: row[5].toString().trim(),
+                        starterName: row[6].toString().trim()
+                    });
+                }
+            });
+            localStorage.setItem('importData', JSON.stringify(importData));
+            currentPage = 1; // Reset to first page
+            renderTable();
+            fileInput.value = ''; // Clear the file input
+        };
+        reader.readAsArrayBuffer(file);
+    }
+}
+
+function deleteAllImportData() {
+    importData = [];
+    localStorage.removeItem('importData');
+    currentPage = 1; // Reset to first page
+    renderTable();
+}
+
 function prevPage() {
     if (currentPage > 1) {
         currentPage--;
-        displayData();
+        renderTable();
     }
 }
 
 function nextPage() {
     if (currentPage < Math.ceil(importData.length / recordsPerPage)) {
         currentPage++;
-        displayData();
-    }
-}
-
-function clearData() {
-    localStorage.removeItem('importData');
-    importData = [];
-    displayData();
-}
-
-function importData() {
-    const input = document.getElementById('fileInput');
-    if (input.files.length > 0) {
-        handleFileSelect({target: {files: input.files}});
+        renderTable();
     }
 }
 
@@ -92,9 +102,5 @@ function toggleMenu() {
 }
 
 window.onload = () => {
-    const savedImportData = localStorage.getItem('importData');
-    if (savedImportData) {
-        importData = JSON.parse(savedImportData);
-        displayData();
-    }
+    fetchImportData();
 };

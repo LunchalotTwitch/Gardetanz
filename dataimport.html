@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenimport</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="menu-button">
@@ -17,35 +17,35 @@
             <li><a href="references.html">Referenzseite</a></li>
             <li><a href="results.html">Ergebnisse</a></li>
             <li><a href="dataimport.html">Datenimport</a></li>
-            <li><a href="admin.html">Admin Seite</a></li>
         </ul>
     </div>
     <div class="container">
         <h1>Datenimport</h1>
-        <input type="file" id="fileInput" />
-        <button onclick="importData()" class="green-button">Jetzt importieren</button>
-        <button onclick="clearData()" class="red-button">Referenzliste löschen</button>
-        
+        <div class="import-container">
+            <input type="file" id="fileInput" accept=".xlsx">
+            <button class="import-button green-button" onclick="importExcelData()">Jetzt importieren</button>
+            <button class="delete-all-button red-button" onclick="deleteAllImportData()">Importierte Liste löschen</button>
+        </div>
         <div class="pagination">
             <button id="prevPage" onclick="prevPage()">⬅️</button>
             <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
             <button id="nextPage" onclick="nextPage()">➡️</button>
         </div>
-
-        <table id="importedData">
+        <h2>Importierte Daten</h2>
+        <table id="importTable">
             <thead>
                 <tr>
                     <th>Turnier</th>
                     <th>Datum</th>
                     <th>Altersklasse</th>
                     <th>Disziplin</th>
-                    <th>Startnummer</th>
+                    <th>Startnr.</th>
                     <th>Verein</th>
-                    <th>Name des Starters</th>
+                    <th>Name</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Imported data will be displayed here -->
+                <!-- Importierte Daten werden hier hinzugefügt -->
             </tbody>
         </table>
     </div>
