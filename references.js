@@ -1,95 +1,81 @@
-let referenceData = {};
+let referenceData = {}; // Object to store reference data
 
-// Function to save reference data
-function saveReference() {
-    const form = document.getElementById('referenceForm');
-    const formData = new FormData(form);
-
-    const tournament = formData.get('tournament');
-    const date = formatDate(formData.get('date'));
-    const ageGroup = formData.get('ageGroup');
-    const discipline = formData.get('discipline');
-    const startNumber = formData.get('startNumber');
-    const club = formData.get('club');
-    const starterName = formData.get('starterName');
-
-    // Validate that all fields are filled
-    if (!tournament || !date || !ageGroup || !discipline || !startNumber || !club || !starterName) {
-        alert("Bitte füllen Sie alle Felder aus.");
-        return;
+function fetchReferenceData() {
+    const savedData = localStorage.getItem('referenceData');
+    if (savedData) {
+        referenceData = JSON.parse(savedData);
+        populateReferenceTable();
     }
-
-    referenceData[startNumber] = {
-        tournament: tournament,
-        date: date,
-        ageGroup: ageGroup,
-        discipline: discipline,
-        club: club,
-        starterName: starterName
-    };
-
-    updateReferenceTable();
-    form.reset();
 }
 
-// Function to format date to DD.MM.YYYY
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-}
-
-// Function to update the reference table
-function updateReferenceTable() {
+function populateReferenceTable() {
     const tableBody = document.querySelector('#referenceTable tbody');
     tableBody.innerHTML = '';
 
-    for (const startNumber in referenceData) {
-        const ref = referenceData[startNumber];
+    for (const key in referenceData) {
+        const reference = referenceData[key];
         const row = document.createElement('tr');
-        
+
         row.innerHTML = `
-            <td>${ref.tournament}</td>
-            <td>${ref.date}</td>
-            <td>${ref.ageGroup}</td>
-            <td>${ref.discipline}</td>
-            <td>${startNumber}</td>
-            <td>${ref.club}</td>
-            <td>${ref.starterName}</td>
-            <td><button class="delete-button" onclick="deleteReference('${startNumber}')">-</button></td>
+            <td>${reference.tournament}</td>
+            <td>${reference.date}</td>
+            <td>${reference.ageGroup}</td>
+            <td>${reference.discipline}</td>
+            <td>${reference.startNumber}</td>
+            <td>${reference.club}</td>
+            <td>${reference.starterName}</td>
+            <td><button class="delete-button" onclick="deleteReference('${key}')">löschen</button></td>
         `;
 
         tableBody.appendChild(row);
     }
 }
 
-// Function to delete a specific reference
-function deleteReference(startNumber) {
-    delete referenceData[startNumber];
-    updateReferenceTable();
+function importData() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            referenceData = {}; // Reset reference data
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip header row
+                if (row.length >= 7) { // Ensure all required columns are present
+                    const key = row[4].toString().trim(); // Assuming start number as the key
+                    referenceData[key] = {
+                        tournament: row[0].toString().trim(),
+                        date: row[1].toString().trim(),
+                        ageGroup: row[2].toString().trim(),
+                        discipline: row[3].toString().trim(),
+                        startNumber: row[4].toString().trim(),
+                        club: row[5].toString().trim(),
+                        starterName: row[6].toString().trim()
+                    };
+                }
+            });
+            localStorage.setItem('referenceData', JSON.stringify(referenceData));
+            populateReferenceTable();
+            fileInput.value = ''; // Clear the file input
+        };
+        reader.readAsArrayBuffer(file);
+    }
 }
 
-// Function to delete all references
+function deleteReference(key) {
+    delete referenceData[key];
+    localStorage.setItem('referenceData', JSON.stringify(referenceData));
+    populateReferenceTable();
+}
+
 function deleteAllReferences() {
     referenceData = {};
-    updateReferenceTable();
-    alert("Referenzliste wurde gelöscht.");
-}
-
-// Function to save reference data to localStorage
-function saveToLocalStorage() {
-    localStorage.setItem('referenceData', JSON.stringify(referenceData));
-}
-
-// Function to load reference data from localStorage
-function loadFromLocalStorage() {
-    const savedData = localStorage.getItem('referenceData');
-    if (savedData) {
-        referenceData = JSON.parse(savedData);
-        updateReferenceTable();
-    }
+    localStorage.removeItem('referenceData');
+    populateReferenceTable();
 }
 
 // Function to toggle the menu
@@ -98,46 +84,6 @@ function toggleMenu() {
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Function to import data from Excel
-function importFromExcel() {
-    const fileInput = document.getElementById('fileInput');
-    const progressBar = document.getElementById('progressBar');
-    const file = fileInput.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-
-            progressBar.style.display = 'block';
-            progressBar.value = 0;
-
-            for (let i = 1; i < worksheet.length; i++) {
-                const row = worksheet[i];
-                if (row.length < 7 || row.includes("")) {
-                    continue; // Skip rows with missing data
-                }
-                referenceData[row[4]] = {
-                    tournament: row[0],
-                    date: formatDate(row[1]),
-                    ageGroup: row[2],
-                    discipline: row[3],
-                    club: row[5],
-                    starterName: row[6]
-                };
-                progressBar.value = (i / worksheet.length) * 100;
-            }
-
-            progressBar.style.display = 'none';
-            updateReferenceTable();
-        };
-        reader.readAsArrayBuffer(file);
-    }
-}
-
-// Load data from localStorage on page load
-window.onload = loadFromLocalStorage;
-window.onbeforeunload = saveToLocalStorage;
+window.onload = () => {
+    fetchReferenceData();
+};
