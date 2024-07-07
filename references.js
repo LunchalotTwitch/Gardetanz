@@ -41,16 +41,18 @@ function importData() {
             const rows = contents.split('\n');
             rows.forEach(row => {
                 const cols = row.split(',');
-                const key = cols[4]; // Assuming start number as the key
-                referenceData[key] = {
-                    tournament: cols[0],
-                    date: cols[1],
-                    ageGroup: cols[2],
-                    discipline: cols[3],
-                    startNumber: cols[4],
-                    club: cols[5],
-                    starterName: cols[6]
-                };
+                if (cols.length >= 7) { // Ensure all required columns are present
+                    const key = cols[4].trim(); // Assuming start number as the key
+                    referenceData[key] = {
+                        tournament: cols[0].trim(),
+                        date: cols[1].trim(),
+                        ageGroup: cols[2].trim(),
+                        discipline: cols[3].trim(),
+                        startNumber: cols[4].trim(),
+                        club: cols[5].trim(),
+                        starterName: cols[6].trim()
+                    };
+                }
             });
             localStorage.setItem('referenceData', JSON.stringify(referenceData));
             populateReferenceTable();
