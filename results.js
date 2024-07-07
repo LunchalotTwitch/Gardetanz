@@ -42,7 +42,7 @@ function renderResultsTable() {
             <td class="${placeClass}">${startIndex + index + 1}</td>
             <td>${points}</td>
             <td>${total}</td>
-            ${entry.scores.map((score, i) => `<td class="${score === minScore || score === maxScore ? 'streicher' : ''}">${score}</td>`).join('')}
+            ${entry.scores.map((score, i) => `<td class="${score === minScore || score === maxScore ? 'streicher' : ''}">WR${i + 1}: ${score}</td>`).join('')}
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
