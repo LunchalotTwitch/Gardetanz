@@ -55,19 +55,19 @@ function fetchStartersData() {
 
 function updateStarterInfo() {
     const startNumber = document.getElementById('startNumber').value;
-    const starterInfo = startersData[startNumber] || { ageGroup: "", discipline: "", club: "", name: "" };
+    const starterInfo = startersData[startNumber] || { ageGroup: "", discipline: "", club: "", starterName: "" };
 
     document.getElementById('ageGroup').value = starterInfo.ageGroup;
     document.getElementById('discipline').value = starterInfo.discipline;
     document.getElementById('club').value = starterInfo.club;
-    document.getElementById('starterName').value = starterInfo.name;
+    document.getElementById('starterName').value = starterInfo.starterName;
 }
 
 function saveEntry() {
     const form = document.getElementById('entryForm');
     const formData = new FormData(form);
     const startNumber = formData.get('startNumber');
-    const starterInfo = startersData[startNumber] || { club: "", name: "" };
+    const starterInfo = startersData[startNumber] || { club: "", starterName: "" };
 
     const entry = {
         tournament: formData.get('tournament'),
@@ -75,7 +75,7 @@ function saveEntry() {
         discipline: formData.get('discipline'),
         startNumber: startNumber,
         club: starterInfo.club,
-        starterName: starterInfo.name,
+        starterName: starterInfo.starterName,
         scores: []
     };
 
