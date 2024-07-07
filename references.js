@@ -49,10 +49,17 @@ function updateReferenceTable() {
             <td>${startNumber}</td>
             <td>${ref.club}</td>
             <td>${ref.starterName}</td>
+            <td><button onclick="deleteReference('${startNumber}')">-</button></td>
         `;
 
         tableBody.appendChild(row);
     }
+}
+
+// Function to delete a specific reference
+function deleteReference(startNumber) {
+    delete referenceData[startNumber];
+    updateReferenceTable();
 }
 
 // Function to save reference data to localStorage
