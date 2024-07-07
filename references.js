@@ -39,6 +39,7 @@ function importData() {
         reader.onload = function(e) {
             const contents = e.target.result;
             const rows = contents.split('\n');
+            referenceData = {}; // Reset reference data
             rows.forEach(row => {
                 const cols = row.split(',');
                 if (cols.length >= 7) { // Ensure all required columns are present
