@@ -1,33 +1,17 @@
-let entries = [];
-let startersData = {}; // Object to store starters data
+let referenceData = {}; // Object to store reference data
+let entries = []; // Array to store entries
 
-// Function to fetch starters data from localStorage
-function fetchStartersData() {
+// Function to fetch reference data from localStorage
+function fetchReferenceData() {
     const savedData = localStorage.getItem('referenceData');
     if (savedData) {
-        startersData = JSON.parse(savedData);
+        referenceData = JSON.parse(savedData);
 
-        // Populate start numbers, age groups, and disciplines in the dropdowns
+        // Populate tournaments
         const tournamentSelect = document.getElementById('tournament');
-        const startNumberSelect = document.getElementById('startNumber');
-        const ageGroupSelect = document.getElementById('ageGroup');
-        const disciplineSelect = document.getElementById('discipline');
-
         const tournaments = new Set();
-        const ageGroups = new Set();
-        const disciplines = new Set();
-
-        for (const startNumber in startersData) {
-            const starter = startersData[startNumber];
-            
-            tournaments.add(starter.tournament);
-            ageGroups.add(starter.ageGroup);
-            disciplines.add(starter.discipline);
-
-            const option = document.createElement('option');
-            option.value = startNumber;
-            option.text = startNumber;
-            startNumberSelect.appendChild(option);
+        for (const startNumber in referenceData) {
+            tournaments.add(referenceData[startNumber].tournament);
         }
 
         tournaments.forEach(tournament => {
@@ -36,6 +20,22 @@ function fetchStartersData() {
             option.text = tournament;
             tournamentSelect.appendChild(option);
         });
+    }
+}
+
+// Function to update age groups based on selected tournament
+function updateAgeGroups() {
+    const tournament = document.getElementById('tournament').value;
+    const ageGroupSelect = document.getElementById('ageGroup');
+    ageGroupSelect.innerHTML = '<option value="">Wählen...</option>';
+
+    if (tournament) {
+        const ageGroups = new Set();
+        for (const startNumber in referenceData) {
+            if (referenceData[startNumber].tournament === tournament) {
+                ageGroups.add(referenceData[startNumber].ageGroup);
+            }
+        }
 
         ageGroups.forEach(ageGroup => {
             const option = document.createElement('option');
@@ -44,30 +44,88 @@ function fetchStartersData() {
             ageGroupSelect.appendChild(option);
         });
 
+        ageGroupSelect.disabled = false;
+    } else {
+        ageGroupSelect.disabled = true;
+        document.getElementById('discipline').disabled = true;
+        document.getElementById('startNumber').disabled = true;
+    }
+}
+
+// Function to update disciplines based on selected age group
+function updateDisciplines() {
+    const tournament = document.getElementById('tournament').value;
+    const ageGroup = document.getElementById('ageGroup').value;
+    const disciplineSelect = document.getElementById('discipline');
+    disciplineSelect.innerHTML = '<option value="">Wählen...</option>';
+
+    if (tournament && ageGroup) {
+        const disciplines = new Set();
+        for (const startNumber in referenceData) {
+            if (referenceData[startNumber].tournament === tournament && referenceData[startNumber].ageGroup === ageGroup) {
+                disciplines.add(referenceData[startNumber].discipline);
+            }
+        }
+
         disciplines.forEach(discipline => {
             const option = document.createElement('option');
             option.value = discipline;
             option.text = discipline;
             disciplineSelect.appendChild(option);
         });
+
+        disciplineSelect.disabled = false;
+    } else {
+        disciplineSelect.disabled = true;
+        document.getElementById('startNumber').disabled = true;
     }
 }
 
-function updateStarterInfo() {
-    const startNumber = document.getElementById('startNumber').value;
-    const starterInfo = startersData[startNumber] || { ageGroup: "", discipline: "", club: "", starterName: "" };
+// Function to update start numbers based on selected discipline
+function updateStartNumbers() {
+    const tournament = document.getElementById('tournament').value;
+    const ageGroup = document.getElementById('ageGroup').value;
+    const discipline = document.getElementById('discipline').value;
+    const startNumberSelect = document.getElementById('startNumber');
+    startNumberSelect.innerHTML = '<option value="">Wählen...</option>';
 
-    document.getElementById('ageGroup').value = starterInfo.ageGroup;
-    document.getElementById('discipline').value = starterInfo.discipline;
-    document.getElementById('club').value = starterInfo.club;
-    document.getElementById('starterName').value = starterInfo.starterName;
+    if (tournament && ageGroup && discipline) {
+        for (const startNumber in referenceData) {
+            if (referenceData[startNumber].tournament === tournament &&
+                referenceData[startNumber].ageGroup === ageGroup &&
+                referenceData[startNumber].discipline === discipline) {
+                const option = document.createElement('option');
+                option.value = startNumber;
+                option.text = startNumber;
+                startNumberSelect.appendChild(option);
+            }
+        }
+
+        startNumberSelect.disabled = false;
+    } else {
+        startNumberSelect.disabled = true;
+    }
 }
 
+// Function to update starter info based on selected start number
+function updateStarterInfo() {
+    const startNumber = document.getElementById('startNumber').value;
+    if (startNumber) {
+        const starterInfo = referenceData[startNumber];
+        document.getElementById('club').value = starterInfo.club;
+        document.getElementById('starterName').value = starterInfo.starterName;
+    } else {
+        document.getElementById('club').value = '';
+        document.getElementById('starterName').value = '';
+    }
+}
+
+// Function to save entry
 function saveEntry() {
     const form = document.getElementById('entryForm');
     const formData = new FormData(form);
     const startNumber = formData.get('startNumber');
-    const starterInfo = startersData[startNumber] || { club: "", starterName: "" };
+    const starterInfo = referenceData[startNumber] || { club: "", starterName: "" };
 
     const entry = {
         tournament: formData.get('tournament'),
@@ -96,12 +154,13 @@ function saveEntry() {
 
     // Retain tournament, ageGroup, and discipline; increment startNumber
     const nextStartNumber = parseInt(startNumber) + 1;
-    if (startersData[nextStartNumber]) {
+    if (referenceData[nextStartNumber]) {
         document.getElementById('startNumber').value = nextStartNumber;
         updateStarterInfo();
     }
 }
 
+// Function to update the results table
 function updateResultsTable() {
     const filterTournament = document.getElementById('tournament').value;
     const filterAgeGroup = document.getElementById('ageGroup').value;
@@ -112,8 +171,8 @@ function updateResultsTable() {
 
     const filteredEntries = entries.filter(entry => {
         return (!filterTournament || entry.tournament === filterTournament) &&
-               (!filterAgeGroup || entry.ageGroup.includes(filterAgeGroup)) &&
-               (!filterDiscipline || entry.discipline.includes(filterDiscipline));
+               (!filterAgeGroup || entry.ageGroup === filterAgeGroup) &&
+               (!filterDiscipline || entry.discipline === filterDiscipline);
     });
 
     filteredEntries.sort((a, b) => b.pointScore - a.pointScore);
@@ -139,6 +198,7 @@ function updateResultsTable() {
     });
 }
 
+// Function to handle Enter key for moving to the next input field
 function nextInput(event) {
     if (event.key === "Enter") {
         const formElements = Array.from(event.target.form.elements);
@@ -150,13 +210,14 @@ function nextInput(event) {
     }
 }
 
+// Function to toggle the menu
 function toggleMenu() {
     const menu = document.getElementById('menu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Fetch starters data on page load
+// Fetch reference data on page load
 window.onload = () => {
-    fetchStartersData();
+    fetchReferenceData();
     updateResultsTable();
 };
