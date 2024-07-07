@@ -14,18 +14,21 @@ function populateFilters() {
     const ageGroups = new Set();
     const disciplines = new Set();
     const clubs = new Set();
+    const dates = new Set();
 
     entries.forEach(entry => {
         tournaments.add(entry.tournament);
         ageGroups.add(entry.ageGroup);
         disciplines.add(entry.discipline);
         clubs.add(entry.club);
+        dates.add(entry.date);
     });
 
     const tournamentSelect = document.getElementById('filterTournament');
     const ageGroupSelect = document.getElementById('filterAgeGroup');
     const disciplineSelect = document.getElementById('filterDiscipline');
     const clubSelect = document.getElementById('filterClub');
+    const dateSelect = document.getElementById('filterDate');
 
     tournaments.forEach(tournament => {
         const option = document.createElement('option');
@@ -54,10 +57,18 @@ function populateFilters() {
         option.text = club;
         clubSelect.appendChild(option);
     });
+
+    dates.forEach(date => {
+        const option = document.createElement('option');
+        option.value = date;
+        option.text = date;
+        dateSelect.appendChild(option);
+    });
 }
 
 // Function to update the results table based on filters
 function updateResultsTable() {
+    const filterDate = document.getElementById('filterDate').value;
     const filterTournament = document.getElementById('filterTournament').value;
     const filterAgeGroup = document.getElementById('filterAgeGroup').value;
     const filterDiscipline = document.getElementById('filterDiscipline').value;
@@ -67,7 +78,8 @@ function updateResultsTable() {
     tableBody.innerHTML = '';
 
     const filteredEntries = entries.filter(entry => {
-        return (!filterTournament || entry.tournament === filterTournament) &&
+        return (!filterDate || entry.date === filterDate) &&
+               (!filterTournament || entry.tournament === filterTournament) &&
                (!filterAgeGroup || entry.ageGroup === filterAgeGroup) &&
                (!filterDiscipline || entry.discipline === filterDiscipline) &&
                (!filterClub || entry.club === filterClub);
@@ -92,6 +104,7 @@ function updateResultsTable() {
 
         row.innerHTML = `
             <td class="${placeClass}">${index + 1}</td>
+            <td>${entry.date}</td>
             <td>${entry.tournament}</td>
             <td>${entry.ageGroup}</td>
             <td>${entry.discipline}</td>
