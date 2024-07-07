@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Datenimport</title>
+    <title>Admin Seite</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="menu-button">
@@ -21,35 +20,31 @@
         </ul>
     </div>
     <div class="container">
-        <h1>Datenimport</h1>
-        <div class="import-container">
-            <input type="file" id="fileInput" accept=".xlsx">
-            <button class="import-button green-button" onclick="importExcelData()">Jetzt importieren</button>
-            <button class="delete-all-button red-button" onclick="deleteAllImportData()">Importierte Liste löschen</button>
-        </div>
-        <div class="pagination">
-            <button id="prevPage" onclick="prevPage()">⬅️</button>
-            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
-            <button id="nextPage" onclick="nextPage()">➡️</button>
-        </div>
-        <h2>Importierte Daten</h2>
-        <table id="importTable">
+        <h1>Admin Seite</h1>
+        <table id="adminTable">
             <thead>
                 <tr>
-                    <th>Datum</th>
+                    <th>Turnier</th>
                     <th>Altersklasse</th>
                     <th>Disziplin</th>
                     <th>Startnr.</th>
-                    <th>Turnier</th>
                     <th>Verein</th>
                     <th>Name</th>
+                    <th>WR1</th>
+                    <th>WR2</th>
+                    <th>WR3</th>
+                    <th>WR4</th>
+                    <th>WR5</th>
+                    <th>WR6</th>
+                    <th>WR7</th>
+                    <th>Aktionen</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Importierte Daten werden hier hinzugefügt -->
+                <!-- Datensätze werden hier hinzugefügt -->
             </tbody>
         </table>
     </div>
-    <script src="dataimport.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
