@@ -201,6 +201,9 @@ function updateResultsTable() {
     const filterAgeGroup = document.getElementById('ageGroup').value;
     const filterDiscipline = document.getElementById('discipline').value;
 
+    const resultsTitle = document.getElementById('resultsTitle');
+    const resultsTable = document.getElementById('resultsTable');
+
     const tableBody = document.querySelector('#resultsTable tbody');
     tableBody.innerHTML = '';
 
@@ -210,6 +213,14 @@ function updateResultsTable() {
                (!filterDiscipline || entry.discipline === filterDiscipline);
     });
 
+    if (filteredEntries.length > 0) {
+        resultsTitle.style.display = 'block';
+        resultsTable.style.display = 'table';
+    } else {
+        resultsTitle.style.display = 'none';
+        resultsTable.style.display = 'none';
+    }
+
     filteredEntries.sort((a, b) => b.pointScore - a.pointScore);
 
     filteredEntries.forEach((entry, index) => {
@@ -217,16 +228,13 @@ function updateResultsTable() {
         
         row.innerHTML = `
             <td>${index + 1}</td>
-            <td>${entry.tournament}</td>
-            <td>${entry.ageGroup}</td>
-            <td>${entry.discipline}</td>
+            <td>${entry.pointScore}</td>
+            <td>${entry.totalScore}</td>
+            <td>${entry.lowestScore}, ${entry.highestScore}</td>
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
             <td>${entry.scores.join(', ')}</td>
-            <td>${entry.lowestScore}, ${entry.highestScore}</td>
-            <td>${entry.pointScore}</td>
-            <td>${entry.totalScore}</td>
         `;
 
         tableBody.appendChild(row);
