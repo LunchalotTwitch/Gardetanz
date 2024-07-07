@@ -17,13 +17,11 @@ function populateFilters() {
     const ageGroups = [...new Set(monitoringData.map(item => item.ageGroup))];
     const disciplines = [...new Set(monitoringData.map(item => item.discipline))];
     const clubs = [...new Set(monitoringData.map(item => item.club))];
-    const names = [...new Set(monitoringData.map(item => item.starterName))];
 
     const tournamentSelect = document.getElementById('filterTournament');
     const ageGroupSelect = document.getElementById('filterAgeGroup');
     const disciplineSelect = document.getElementById('filterDiscipline');
     const clubSelect = document.getElementById('filterClub');
-    const nameSelect = document.getElementById('filterName');
 
     tournaments.forEach(tournament => {
         const option = document.createElement('option');
@@ -52,13 +50,6 @@ function populateFilters() {
         option.textContent = club;
         clubSelect.appendChild(option);
     });
-
-    names.forEach(name => {
-        const option = document.createElement('option');
-        option.value = name;
-        option.textContent = name;
-        nameSelect.appendChild(option);
-    });
 }
 
 function applyFilters() {
@@ -66,7 +57,6 @@ function applyFilters() {
     const ageGroup = document.getElementById('filterAgeGroup').value;
     const discipline = document.getElementById('filterDiscipline').value;
     const club = document.getElementById('filterClub').value;
-    const name = document.getElementById('filterName').value;
 
     let data = monitoringData;
 
@@ -82,13 +72,28 @@ function applyFilters() {
     if (club) {
         data = data.filter(item => item.club === club);
     }
-    if (name) {
-        data = data.filter(item => item.starterName === name);
-    }
 
     filteredData = data;
+    populateNames();
     sortFilteredData();
     renderResultsTable();
+}
+
+function populateNames() {
+    const club = document.getElementById('filterClub').value;
+    const nameSelect = document.getElementById('filterName');
+    nameSelect.innerHTML = '<option value="">Alle</option>'; // Reset names
+    nameSelect.disabled = !club; // Disable if no club is selected
+
+    if (club) {
+        const names = [...new Set(filteredData.map(item => item.starterName))];
+        names.forEach(name => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            nameSelect.appendChild(option);
+        });
+    }
 }
 
 function sortFilteredData() {
@@ -117,6 +122,8 @@ function renderResultsTable() {
 
     filteredData.slice(startIndex, endIndex).forEach((entry, index) => {
         const row = document.createElement('tr');
+        const allScoresZero = entry.scores.every(score => score === 0);
+        const rowClass = allScoresZero ? 'strikethrough' : '';
         const total = entry.scores.reduce((sum, score) => sum + score, 0);
         const points = calculatePoints(entry.scores);
         const sortedScores = [...entry.scores].sort((a, b) => a - b);
@@ -130,13 +137,13 @@ function renderResultsTable() {
         else if (startIndex + index === 2) placeClass = 'bronze';
 
         row.innerHTML = `
-            <td class="${placeClass}">${startIndex + index + 1}</td>
-            <td>${points}</td>
-            <td>${total}</td>
-            ${entry.scores.map(score => `<td class="${(score === minScore || score === maxScore) ? 'streicher' : ''}">${score}</td>`).join('')}
-            <td>${entry.startNumber}</td>
-            <td>${entry.club}</td>
-            <td>${entry.starterName}</td>
+            <td class="${placeClass} ${rowClass}">${startIndex + index + 1}</td>
+            <td class="${rowClass}">${points}</td>
+            <td class="${rowClass}">${total}</td>
+            ${entry.scores.map(score => `<td class="${(score === minScore || score === maxScore) ? 'streicher' : ''} ${rowClass}">${score}</td>`).join('')}
+            <td class="${rowClass}">${entry.startNumber}</td>
+            <td class="${rowClass}">${entry.club}</td>
+            <td class="${rowClass}">${entry.starterName}</td>
         `;
 
         tableBody.appendChild(row);

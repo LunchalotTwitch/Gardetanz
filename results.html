@@ -13,7 +13,6 @@
     <div id="menu" class="menu">
         <ul>
             <li><a href="index.html">Monitoringseite</a></li>
-            <li><a href="references.html">Referenzseite</a></li>
             <li><a href="results.html">Ergebnisse</a></li>
             <li><a href="dataimport.html">Datenimport</a></li>
             <li><a href="admin.html">Admin Seite</a></li>
@@ -43,7 +42,7 @@
             </select>
 
             <label for="filterName">Name:</label>
-            <select id="filterName" onchange="applyFilters()">
+            <select id="filterName" onchange="applyFilters()" disabled>
                 <option value="">Alle</option>
             </select>
         </div>

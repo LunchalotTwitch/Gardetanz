@@ -144,6 +144,10 @@ th {
     color: black;
 }
 
+.strikethrough {
+    text-decoration: line-through;
+}
+
 .pagination {
     display: flex;
     justify-content: center;
