@@ -6,8 +6,21 @@ function fetchImportData() {
     const savedData = localStorage.getItem('importData');
     if (savedData) {
         importData = JSON.parse(savedData);
+        sortData();
         renderTable();
     }
+}
+
+function sortData() {
+    const ageGroupOrder = { 'Jugend': 1, 'Junioren': 2, 'Senioren': 3 };
+    importData.sort((a, b) => {
+        const dateA = new Date(a.date.split('.').reverse().join('-'));
+        const dateB = new Date(b.date.split('.').reverse().join('-'));
+        if (dateA - dateB !== 0) return dateA - dateB;
+        if (ageGroupOrder[a.ageGroup] - ageGroupOrder[b.ageGroup] !== 0) return ageGroupOrder[a.ageGroup] - ageGroupOrder[b.ageGroup];
+        if (a.discipline.localeCompare(b.discipline) !== 0) return a.discipline.localeCompare(b.discipline);
+        return parseInt(a.startNumber) - parseInt(b.startNumber);
+    });
 }
 
 function renderTable() {
@@ -22,11 +35,11 @@ function renderTable() {
         const row = document.createElement('tr');
 
         row.innerHTML = `
-            <td>${data.tournament}</td>
             <td>${data.date}</td>
             <td>${data.ageGroup}</td>
             <td>${data.discipline}</td>
             <td>${data.startNumber}</td>
+            <td>${data.tournament}</td>
             <td>${data.club}</td>
             <td>${data.starterName}</td>
         `;
@@ -68,6 +81,7 @@ function importExcelData() {
             });
             localStorage.setItem('importData', JSON.stringify(importData));
             currentPage = 1; // Reset to first page
+            sortData();
             renderTable();
             fileInput.value = ''; // Clear the file input
         };
