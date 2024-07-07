@@ -225,16 +225,30 @@ function updateResultsTable() {
 
     filteredEntries.forEach((entry, index) => {
         const row = document.createElement('tr');
-        
+
+        const scoresHtml = entry.scores.map((score, i) => {
+            const isLowest = score === entry.lowestScore;
+            const isHighest = score === entry.highestScore;
+            const className = isLowest || isHighest ? 'highlight' : '';
+            return `<td class="${className}">${score}</td>`;
+        }).join('');
+
+        let placeClass = '';
+        if (index === 0) placeClass = 'gold';
+        else if (index === 1) placeClass = 'silver';
+        else if (index === 2) placeClass = 'bronze';
+
         row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${entry.pointScore}</td>
-            <td>${entry.totalScore}</td>
-            <td>${entry.lowestScore}, ${entry.highestScore}</td>
+            <td class="${placeClass}">${index + 1}</td>
+            <td>${entry.tournament}</td>
+            <td>${entry.ageGroup}</td>
+            <td>${entry.discipline}</td>
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
-            <td>${entry.scores.join(', ')}</td>
+            ${scoresHtml}
+            <td>${entry.pointScore}</td>
+            <td>${entry.totalScore}</td>
         `;
 
         tableBody.appendChild(row);

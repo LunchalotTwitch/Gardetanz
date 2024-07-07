@@ -147,6 +147,21 @@ td button.delete-button:hover {
     color: white;
 }
 
+.gold {
+    background-color: gold;
+    color: black;
+}
+
+.silver {
+    background-color: silver;
+    color: black;
+}
+
+.bronze {
+    background-color: #cd7f32;
+    color: black;
+}
+
 @media (max-width: 600px) {
     .form-group.scores {
         flex-direction: column;

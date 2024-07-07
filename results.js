@@ -85,8 +85,13 @@ function updateResultsTable() {
             return `<td class="${className}">${score}</td>`;
         }).join('');
 
+        let placeClass = '';
+        if (index === 0) placeClass = 'gold';
+        else if (index === 1) placeClass = 'silver';
+        else if (index === 2) placeClass = 'bronze';
+
         row.innerHTML = `
-            <td>${index + 1}</td>
+            <td class="${placeClass}">${index + 1}</td>
             <td>${entry.tournament}</td>
             <td>${entry.ageGroup}</td>
             <td>${entry.discipline}</td>
