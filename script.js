@@ -240,15 +240,13 @@ function updateResultsTable() {
 
         row.innerHTML = `
             <td class="${placeClass}">${index + 1}</td>
-            <td>${entry.tournament}</td>
-            <td>${entry.ageGroup}</td>
-            <td>${entry.discipline}</td>
+            <td>${entry.pointScore}</td>
+            <td>${entry.totalScore}</td>
+            <td>${entry.lowestScore}, ${entry.highestScore}</td>
+            ${scoresHtml}
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
-            ${scoresHtml}
-            <td>${entry.pointScore}</td>
-            <td>${entry.totalScore}</td>
         `;
 
         tableBody.appendChild(row);
