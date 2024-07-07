@@ -1,6 +1,7 @@
 let monitoringData = [];
 let referenceData = [];
 
+// Fetch reference data and populate tournaments on page load
 function fetchReferenceData() {
     const savedReferenceData = localStorage.getItem('referenceData');
     if (savedReferenceData) {
@@ -12,6 +13,7 @@ function fetchReferenceData() {
 function populateTournaments() {
     const tournaments = [...new Set(referenceData.map(item => item.tournament))];
     const tournamentSelect = document.getElementById('tournament');
+    tournamentSelect.innerHTML = '<option value="">Wählen...</option>'; // Reset options
     tournaments.forEach(tournament => {
         const option = document.createElement('option');
         option.value = tournament;
