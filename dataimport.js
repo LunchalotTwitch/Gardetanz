@@ -1,19 +1,24 @@
-let importData = {}; // Object to store imported data
+let importData = []; // Array to store imported data
+let currentPage = 1; // Current page
+const recordsPerPage = 20; // Records per page
 
 function fetchImportData() {
     const savedData = localStorage.getItem('importData');
     if (savedData) {
         importData = JSON.parse(savedData);
-        populateImportTable();
+        renderTable();
     }
 }
 
-function populateImportTable() {
+function renderTable() {
     const tableBody = document.querySelector('#importTable tbody');
     tableBody.innerHTML = '';
 
-    for (const key in importData) {
-        const data = importData[key];
+    const startIndex = (currentPage - 1) * recordsPerPage;
+    const endIndex = Math.min(startIndex + recordsPerPage, importData.length);
+
+    for (let i = startIndex; i < endIndex; i++) {
+        const data = importData[i];
         const row = document.createElement('tr');
 
         row.innerHTML = `
@@ -28,6 +33,11 @@ function populateImportTable() {
 
         tableBody.appendChild(row);
     }
+
+    document.getElementById('currentPage').innerText = currentPage;
+    document.getElementById('totalPages').innerText = Math.ceil(importData.length / recordsPerPage);
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === Math.ceil(importData.length / recordsPerPage);
 }
 
 function importExcelData() {
@@ -41,12 +51,11 @@ function importExcelData() {
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-            importData = {}; // Reset import data
+            importData = []; // Reset import data
             rows.forEach((row, index) => {
                 if (index === 0) return; // Skip header row
                 if (row.length >= 7) { // Ensure all required columns are present
-                    const key = row[4].toString().trim(); // Assuming start number as the key
-                    importData[key] = {
+                    importData.push({
                         tournament: row[0].toString().trim(),
                         date: row[1].toString().trim(),
                         ageGroup: row[2].toString().trim(),
@@ -54,11 +63,12 @@ function importExcelData() {
                         startNumber: row[4].toString().trim(),
                         club: row[5].toString().trim(),
                         starterName: row[6].toString().trim()
-                    };
+                    });
                 }
             });
             localStorage.setItem('importData', JSON.stringify(importData));
-            populateImportTable();
+            currentPage = 1; // Reset to first page
+            renderTable();
             fileInput.value = ''; // Clear the file input
         };
         reader.readAsArrayBuffer(file);
@@ -66,9 +76,29 @@ function importExcelData() {
 }
 
 function deleteAllImportData() {
-    importData = {};
+    importData = [];
     localStorage.removeItem('importData');
-    populateImportTable();
+    currentPage = 1; // Reset to first page
+    renderTable();
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+    }
+}
+
+function nextPage() {
+    if (currentPage < Math.ceil(importData.length / recordsPerPage)) {
+        currentPage++;
+        renderTable();
+    }
+}
+
+function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
 window.onload = () => {

@@ -8,12 +8,28 @@
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+    <div class="menu-button">
+        <button onclick="toggleMenu()">☰ Menü</button>
+    </div>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="index.html">Monitoringseite</a></li>
+            <li><a href="references.html">Referenzseite</a></li>
+            <li><a href="results.html">Ergebnisse</a></li>
+            <li><a href="dataimport.html">Datenimport</a></li>
+        </ul>
+    </div>
     <div class="container">
         <h1>Datenimport</h1>
         <div class="import-container">
             <input type="file" id="fileInput" accept=".xlsx">
             <button class="import-button green-button" onclick="importExcelData()">Jetzt importieren</button>
             <button class="delete-all-button red-button" onclick="deleteAllImportData()">Importierte Liste löschen</button>
+        </div>
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">⬅️</button>
+            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
+            <button id="nextPage" onclick="nextPage()">➡️</button>
         </div>
         <h2>Importierte Daten</h2>
         <table id="importTable">
@@ -33,13 +49,6 @@
             </tbody>
         </table>
     </div>
-	 <div id="menu" class="menu">
-        <ul>
-            <li><a href="index.html">Monitoringseite</a></li>
-            <li><a href="references.html">Referenzseite</a></li>
-            <li><a href="results.html">Ergebnisse</a></li>
-			<li><a href="dataimport.html">Datenimport</a></li>
-        </ul>
     <script src="dataimport.js"></script>
 </body>
 </html>
