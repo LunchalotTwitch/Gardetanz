@@ -18,37 +18,9 @@
     </div>
     <div class="container">
         <h1>Referenzinformationen</h1>
-        <form id="referenceForm">
-            <label for="tournament">Turnier:</label>
-            <select id="tournament" name="tournament">
-                <option value="">Wählen...</option>
-                <option value="Turnier 1">Turnier 1</option>
-                <option value="Turnier 2">Turnier 2</option>
-            </select>
-
-            <label for="date">Datum:</label>
-            <input type="date" id="date" name="date">
-
-            <label for="ageGroup">Altersklasse:</label>
-            <input type="text" id="ageGroup" name="ageGroup">
-            
-            <label for="discipline">Disziplin:</label>
-            <input type="text" id="discipline" name="discipline">
-            
-            <label for="startNumber">Startnummer:</label>
-            <input type="text" id="startNumber" name="startNumber">
-            
-            <label for="club">Verein:</label>
-            <input type="text" id="club" name="club">
-            
-            <label for="starterName">Name des Starters:</label>
-            <input type="text" id="starterName" name="starterName">
-            
-            <button type="button" onclick="saveReference()">Speichern</button>
-        </form>
-        
         <h2>Referenzliste</h2>
         <input type="file" id="fileInput" accept=".xlsx, .xls">
+        <button type="button" onclick="importFromExcel()">Importieren</button>
         <button type="button" class="delete-all-button" onclick="deleteAllReferences()">Referenzliste löschen</button>
         <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
         

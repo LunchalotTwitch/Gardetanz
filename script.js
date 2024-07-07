@@ -12,7 +12,6 @@ function fetchStartersData() {
         const startNumberSelect = document.getElementById('startNumber');
         const ageGroupSelect = document.getElementById('ageGroup');
         const disciplineSelect = document.getElementById('discipline');
-        const filterTournamentSelect = document.getElementById('filterTournament');
 
         const tournaments = new Set();
         const ageGroups = new Set();
@@ -36,11 +35,6 @@ function fetchStartersData() {
             option.value = tournament;
             option.text = tournament;
             tournamentSelect.appendChild(option);
-
-            const filterOption = document.createElement('option');
-            filterOption.value = tournament;
-            filterOption.text = tournament;
-            filterTournamentSelect.appendChild(filterOption);
         });
 
         ageGroups.forEach(ageGroup => {
@@ -109,9 +103,9 @@ function saveEntry() {
 }
 
 function updateResultsTable() {
-    const filterTournament = document.getElementById('filterTournament').value;
-    const filterAgeGroup = document.getElementById('filterAgeGroup').value;
-    const filterDiscipline = document.getElementById('filterDiscipline').value;
+    const filterTournament = document.getElementById('tournament').value;
+    const filterAgeGroup = document.getElementById('ageGroup').value;
+    const filterDiscipline = document.getElementById('discipline').value;
 
     const tableBody = document.querySelector('#resultsTable tbody');
     tableBody.innerHTML = '';
@@ -162,4 +156,7 @@ function toggleMenu() {
 }
 
 // Fetch starters data on page load
-window.onload = fetchStartersData;
+window.onload = () => {
+    fetchStartersData();
+    updateResultsTable();
+};

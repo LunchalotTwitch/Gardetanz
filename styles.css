@@ -62,22 +62,6 @@ h1, h2 {
     text-align: center;
 }
 
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-
-label {
-    font-size: 0.9em;
-}
-
-input[type="text"], select, input[type="number"], input[type="date"] {
-    padding: 5px;
-    font-size: 0.9em;
-    width: 100%;
-}
-
 button {
     padding: 10px;
     background-color: #007BFF;

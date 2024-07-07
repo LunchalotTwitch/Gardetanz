@@ -1,46 +1,5 @@
 let referenceData = {};
 
-// Function to save reference data
-function saveReference() {
-    const form = document.getElementById('referenceForm');
-    const formData = new FormData(form);
-
-    const tournament = formData.get('tournament');
-    const date = formatDate(formData.get('date'));
-    const ageGroup = formData.get('ageGroup');
-    const discipline = formData.get('discipline');
-    const startNumber = formData.get('startNumber');
-    const club = formData.get('club');
-    const starterName = formData.get('starterName');
-
-    // Validate that all fields are filled
-    if (!tournament || !date || !ageGroup || !discipline || !startNumber || !club || !starterName) {
-        alert("Bitte füllen Sie alle Felder aus.");
-        return;
-    }
-
-    referenceData[startNumber] = {
-        tournament: tournament,
-        date: date,
-        ageGroup: ageGroup,
-        discipline: discipline,
-        club: club,
-        starterName: starterName
-    };
-
-    updateReferenceTable();
-    form.reset();
-}
-
-// Function to format date to DD.MM.YYYY
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-}
-
 // Function to update the reference table
 function updateReferenceTable() {
     const tableBody = document.querySelector('#referenceTable tbody');
@@ -133,9 +92,21 @@ function importFromExcel() {
 
             progressBar.style.display = 'none';
             updateReferenceTable();
+
+            // Clear the file input
+            fileInput.value = "";
         };
         reader.readAsArrayBuffer(file);
     }
+}
+
+// Function to format date to DD.MM.YYYY
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
 }
 
 // Load data from localStorage on page load

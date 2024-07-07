@@ -20,20 +20,20 @@
         <h1>Turnier Monitoring</h1>
         <form id="entryForm">
             <label for="tournament">Turnier:</label>
-            <select id="tournament" name="tournament">
+            <select id="tournament" name="tournament" onchange="updateResultsTable()">
                 <option value="">Wählen...</option>
             </select>
 
             <div class="form-group">
                 <div>
                     <label for="ageGroup">Altersklasse:</label>
-                    <select id="ageGroup" name="ageGroup">
+                    <select id="ageGroup" name="ageGroup" onchange="updateResultsTable()">
                         <option value="">Wählen...</option>
                     </select>
                 </div>
                 <div>
                     <label for="discipline">Disziplin:</label>
-                    <select id="discipline" name="discipline">
+                    <select id="discipline" name="discipline" onchange="updateResultsTable()">
                         <option value="">Wählen...</option>
                     </select>
                 </div>
@@ -94,19 +94,6 @@
         </form>
         
         <h2>Gesamtliste</h2>
-        <div>
-            <label for="filterTournament">Filter Turnier:</label>
-            <select id="filterTournament" onchange="updateResultsTable()">
-                <option value="">Alle</option>
-            </select>
-            
-            <label for="filterAgeGroup">Filter Altersklasse:</label>
-            <input type="text" id="filterAgeGroup" oninput="updateResultsTable()">
-            
-            <label for="filterDiscipline">Filter Disziplin:</label>
-            <input type="text" id="filterDiscipline" oninput="updateResultsTable()">
-        </div>
-        
         <table id="resultsTable">
             <thead>
                 <tr>
