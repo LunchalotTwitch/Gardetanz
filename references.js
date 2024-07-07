@@ -70,10 +70,9 @@ function importFromExcel() {
             progressBar.style.display = 'block';
             progressBar.value = 0;
 
-            for (let i = 1; i < worksheet.length; i++) {
-                const row = worksheet[i];
+            worksheet.slice(1).forEach((row, index) => { // slice(1) to skip header row
                 if (row.length < 7 || row.includes("")) {
-                    continue; // Skip rows with missing data
+                    return; // Skip rows with missing data
                 }
                 referenceData[row[4]] = {
                     tournament: row[0],
@@ -83,8 +82,8 @@ function importFromExcel() {
                     club: row[5],
                     starterName: row[6]
                 };
-                progressBar.value = (i / worksheet.length) * 100;
-            }
+                progressBar.value = ((index + 1) / (worksheet.length - 1)) * 100; // Update progress bar
+            });
 
             progressBar.style.display = 'none';
             updateReferenceTable();
@@ -99,4 +98,12 @@ function importFromExcel() {
 // Function to format date to DD.MM.YYYY
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+
+// Load data from localStorage on page load
+window.onload = loadFromLocalStorage;
+window.onbeforeunload = saveToLocalStorage;
