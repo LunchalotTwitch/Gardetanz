@@ -5,19 +5,39 @@ function updateReferenceTable() {
     const tableBody = document.querySelector('#referenceTable tbody');
     tableBody.innerHTML = '';
 
-    for (const startNumber in referenceData) {
-        const ref = referenceData[startNumber];
+    // Convert referenceData to an array and sort
+    const sortedData = Object.values(referenceData).sort((a, b) => {
+        // Sort by date, then ageGroup, then discipline, then startNumber
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+
+        if (a.ageGroup < b.ageGroup) return -1;
+        if (a.ageGroup > b.ageGroup) return 1;
+
+        if (a.discipline < b.discipline) return -1;
+        if (a.discipline > b.discipline) return 1;
+
+        return a.startNumber - b.startNumber;
+    });
+
+    sortedData.forEach(ref => {
         const row = document.createElement('tr');
         
         row.innerHTML = `
-            <td>${startNumber}</td>
+            <td>${ref.tournament}</td>
+            <td>${ref.date}</td>
+            <td>${ref.ageGroup}</td>
+            <td>${ref.discipline}</td>
+            <td>${ref.startNumber}</td>
             <td>${ref.club}</td>
             <td>${ref.starterName}</td>
-            <td><button class="delete-button" onclick="deleteReference('${startNumber}')">löschen</button></td>
+            <td><button class="delete-button" onclick="deleteReference('${ref.startNumber}')">löschen</button></td>
         `;
 
         tableBody.appendChild(row);
-    }
+    });
 }
 
 // Function to delete a specific reference
@@ -79,6 +99,7 @@ function importFromExcel() {
                     date: formatDate(row[1]),
                     ageGroup: row[2],
                     discipline: row[3],
+                    startNumber: row[4],
                     club: row[5],
                     starterName: row[6]
                 };
