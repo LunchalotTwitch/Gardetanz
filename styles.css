@@ -105,6 +105,7 @@ button.delete-all-button {
     background-color: #ff4d4d;
     color: white;
     margin-top: 10px;
+    border: none;
 }
 
 button.delete-all-button:hover {
@@ -129,6 +130,18 @@ th, td {
 
 th {
     background-color: #333;
+}
+
+td button.delete-button {
+    background-color: transparent;
+    color: #ff4d4d;
+    border: none;
+    cursor: pointer;
+}
+
+td button.delete-button:hover {
+    color: #ff1a1a;
+    text-decoration: underline;
 }
 
 @media (max-width: 600px) {

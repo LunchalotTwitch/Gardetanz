@@ -21,8 +21,7 @@
         <form id="entryForm">
             <label for="tournament">Turnier:</label>
             <select id="tournament" name="tournament">
-                <option value="Turnier 1">Turnier 1</option>
-                <option value="Turnier 2">Turnier 2</option>
+                <option value="">Wählen...</option>
             </select>
 
             <div class="form-group">
@@ -30,14 +29,12 @@
                     <label for="ageGroup">Altersklasse:</label>
                     <select id="ageGroup" name="ageGroup">
                         <option value="">Wählen...</option>
-                        <!-- Optionen werden dynamisch eingefügt -->
                     </select>
                 </div>
                 <div>
                     <label for="discipline">Disziplin:</label>
                     <select id="discipline" name="discipline">
                         <option value="">Wählen...</option>
-                        <!-- Optionen werden dynamisch eingefügt -->
                     </select>
                 </div>
             </div>
@@ -45,7 +42,6 @@
             <label for="startNumber">Startnummer:</label>
             <select id="startNumber" name="startNumber" onchange="updateStarterInfo()">
                 <option value="">Wählen...</option>
-                <!-- Optionen werden dynamisch eingefügt -->
             </select>
 
             <div class="form-group">
@@ -102,8 +98,6 @@
             <label for="filterTournament">Filter Turnier:</label>
             <select id="filterTournament" onchange="updateResultsTable()">
                 <option value="">Alle</option>
-                <option value="Turnier 1">Turnier 1</option>
-                <option value="Turnier 2">Turnier 2</option>
             </select>
             
             <label for="filterAgeGroup">Filter Altersklasse:</label>

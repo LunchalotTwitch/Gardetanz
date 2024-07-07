@@ -58,7 +58,7 @@ function updateReferenceTable() {
             <td>${startNumber}</td>
             <td>${ref.club}</td>
             <td>${ref.starterName}</td>
-            <td><button class="delete-button" onclick="deleteReference('${startNumber}')">-</button></td>
+            <td><button class="delete-button" onclick="deleteReference('${startNumber}')">löschen</button></td>
         `;
 
         tableBody.appendChild(row);

@@ -1,47 +1,62 @@
 let entries = [];
 let startersData = {}; // Object to store starters data
 
-// Function to fetch starters data from another page or API
-async function fetchStartersData() {
-    // Simulate fetching data from an external source
-    startersData = {
-        "1": { ageGroup: "U14", discipline: "Lauf", club: "Verein A", name: "Starter A" },
-        "2": { ageGroup: "U16", discipline: "Sprung", club: "Verein B", name: "Starter B" },
-        "3": { ageGroup: "U18", discipline: "Wurf", club: "Verein C", name: "Starter C" }
-        // Add more data as needed
-    };
+// Function to fetch starters data from localStorage
+function fetchStartersData() {
+    const savedData = localStorage.getItem('referenceData');
+    if (savedData) {
+        startersData = JSON.parse(savedData);
 
-    // Populate start numbers, age groups, and disciplines in the dropdowns
-    const startNumberSelect = document.getElementById('startNumber');
-    const ageGroupSelect = document.getElementById('ageGroup');
-    const disciplineSelect = document.getElementById('discipline');
-    
-    const ageGroups = new Set();
-    const disciplines = new Set();
+        // Populate start numbers, age groups, and disciplines in the dropdowns
+        const tournamentSelect = document.getElementById('tournament');
+        const startNumberSelect = document.getElementById('startNumber');
+        const ageGroupSelect = document.getElementById('ageGroup');
+        const disciplineSelect = document.getElementById('discipline');
+        const filterTournamentSelect = document.getElementById('filterTournament');
 
-    for (const startNumber in startersData) {
-        const option = document.createElement('option');
-        option.value = startNumber;
-        option.text = startNumber;
-        startNumberSelect.appendChild(option);
+        const tournaments = new Set();
+        const ageGroups = new Set();
+        const disciplines = new Set();
 
-        ageGroups.add(startersData[startNumber].ageGroup);
-        disciplines.add(startersData[startNumber].discipline);
+        for (const startNumber in startersData) {
+            const starter = startersData[startNumber];
+            
+            tournaments.add(starter.tournament);
+            ageGroups.add(starter.ageGroup);
+            disciplines.add(starter.discipline);
+
+            const option = document.createElement('option');
+            option.value = startNumber;
+            option.text = startNumber;
+            startNumberSelect.appendChild(option);
+        }
+
+        tournaments.forEach(tournament => {
+            const option = document.createElement('option');
+            option.value = tournament;
+            option.text = tournament;
+            tournamentSelect.appendChild(option);
+
+            const filterOption = document.createElement('option');
+            filterOption.value = tournament;
+            filterOption.text = tournament;
+            filterTournamentSelect.appendChild(filterOption);
+        });
+
+        ageGroups.forEach(ageGroup => {
+            const option = document.createElement('option');
+            option.value = ageGroup;
+            option.text = ageGroup;
+            ageGroupSelect.appendChild(option);
+        });
+
+        disciplines.forEach(discipline => {
+            const option = document.createElement('option');
+            option.value = discipline;
+            option.text = discipline;
+            disciplineSelect.appendChild(option);
+        });
     }
-
-    ageGroups.forEach(ageGroup => {
-        const option = document.createElement('option');
-        option.value = ageGroup;
-        option.text = ageGroup;
-        ageGroupSelect.appendChild(option);
-    });
-
-    disciplines.forEach(discipline => {
-        const option = document.createElement('option');
-        option.value = discipline;
-        option.text = discipline;
-        disciplineSelect.appendChild(option);
-    });
 }
 
 function updateStarterInfo() {
