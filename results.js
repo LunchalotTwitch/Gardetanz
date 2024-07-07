@@ -1,4 +1,13 @@
+let referenceData = {}; // Object to store reference data
 let entries = []; // Array to store entries
+
+// Function to fetch reference data from localStorage
+function fetchReferenceData() {
+    const savedData = localStorage.getItem('referenceData');
+    if (savedData) {
+        referenceData = JSON.parse(savedData);
+    }
+}
 
 // Function to fetch entries from localStorage
 function fetchEntries() {
@@ -17,11 +26,14 @@ function populateFilters() {
     const dates = new Set();
 
     entries.forEach(entry => {
-        tournaments.add(entry.tournament);
-        ageGroups.add(entry.ageGroup);
-        disciplines.add(entry.discipline);
-        clubs.add(entry.club);
-        dates.add(entry.date);
+        const reference = referenceData[entry.startNumber];
+        if (reference) {
+            tournaments.add(reference.tournament);
+            ageGroups.add(reference.ageGroup);
+            disciplines.add(reference.discipline);
+            clubs.add(reference.club);
+            dates.add(reference.date);
+        }
     });
 
     const tournamentSelect = document.getElementById('filterTournament');
@@ -78,16 +90,20 @@ function updateResultsTable() {
     tableBody.innerHTML = '';
 
     const filteredEntries = entries.filter(entry => {
-        return (!filterDate || entry.date === filterDate) &&
-               (!filterTournament || entry.tournament === filterTournament) &&
-               (!filterAgeGroup || entry.ageGroup === filterAgeGroup) &&
-               (!filterDiscipline || entry.discipline === filterDiscipline) &&
-               (!filterClub || entry.club === filterClub);
+        const reference = referenceData[entry.startNumber];
+        if (!reference) return false;
+
+        return (!filterDate || reference.date === filterDate) &&
+               (!filterTournament || reference.tournament === filterTournament) &&
+               (!filterAgeGroup || reference.ageGroup === filterAgeGroup) &&
+               (!filterDiscipline || reference.discipline === filterDiscipline) &&
+               (!filterClub || reference.club === filterClub);
     });
 
     filteredEntries.sort((a, b) => b.pointScore - a.pointScore);
 
     filteredEntries.forEach((entry, index) => {
+        const reference = referenceData[entry.startNumber];
         const row = document.createElement('tr');
 
         const scoresHtml = entry.scores.map((score, i) => {
@@ -104,13 +120,13 @@ function updateResultsTable() {
 
         row.innerHTML = `
             <td class="${placeClass}">${index + 1}</td>
-            <td>${entry.date}</td>
-            <td>${entry.tournament}</td>
-            <td>${entry.ageGroup}</td>
-            <td>${entry.discipline}</td>
+            <td>${reference.date}</td>
+            <td>${reference.tournament}</td>
+            <td>${reference.ageGroup}</td>
+            <td>${reference.discipline}</td>
             <td>${entry.startNumber}</td>
-            <td>${entry.club}</td>
-            <td>${entry.starterName}</td>
+            <td>${reference.club}</td>
+            <td>${reference.starterName}</td>
             ${scoresHtml}
             <td>${entry.pointScore}</td>
             <td>${entry.totalScore}</td>
@@ -126,8 +142,9 @@ function toggleMenu() {
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Fetch entries and populate filters on page load
+// Fetch reference data and entries on page load
 window.onload = () => {
+    fetchReferenceData();
     fetchEntries();
     populateFilters();
     updateResultsTable();

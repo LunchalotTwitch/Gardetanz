@@ -152,7 +152,7 @@ function saveEntry() {
     const starterInfo = referenceData[startNumber] || { club: "", starterName: "" };
 
     const entry = {
-        date: formData.get('date'), // Add date to the entry
+        date: starterInfo.date, // Add date to the entry
         tournament: formData.get('tournament'),
         ageGroup: formData.get('ageGroup'),
         discipline: formData.get('discipline'),
