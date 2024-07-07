@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referenzinformationen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="menu-button">
+        <button onclick="toggleMenu()">☰ Menü</button>
+    </div>
+    <div id="menu" class="menu">
+        <ul>
+            <li><a href="index.html">Monitoringseite</a></li>
+            <li><a href="references.html">Referenzseite</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1>Referenzinformationen</h1>
+        <form id="referenceForm">
+            <label for="tournament">Turnier:</label>
+            <select id="tournament" name="tournament">
+                <option value="Turnier 1">Turnier 1</option>
+                <option value="Turnier 2">Turnier 2</option>
+            </select>
+
+            <label for="date">Datum:</label>
+            <input type="date" id="date" name="date">
+
+            <label for="ageGroup">Altersklasse:</label>
+            <input type="text" id="ageGroup" name="ageGroup">
+            
+            <label for="discipline">Disziplin:</label>
+            <input type="text" id="discipline" name="discipline">
+            
+            <label for="startNumber">Startnummer:</label>
+            <input type="text" id="startNumber" name="startNumber">
+            
+            <label for="club">Verein:</label>
+            <input type="text" id="club" name="club">
+            
+            <label for="starterName">Name des Starters:</label>
+            <input type="text" id="starterName" name="starterName">
+            
+            <button type="button" onclick="saveReference()">Speichern</button>
+        </form>
+        
+        <h2>Referenzliste</h2>
+        <input type="file" id="fileInput" accept=".xlsx, .xls">
+        <button type="button" onclick="importFromExcel()">Importieren</button>
+        <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
+        
+        <table id="referenceTable">
+            <thead>
+                <tr>
+                    <th>Turnier</th>
+                    <th>Datum</th>
+                    <th>Altersklasse</th>
+                    <th>Disziplin</th>
+                    <th>Startnummer</th>
+                    <th>Verein</th>
+                    <th>Name des Starters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Referenzen werden hier hinzugefügt -->
+            </tbody>
+        </table>
+    </div>
+    <script src="references.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</body>
+</html>
