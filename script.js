@@ -1,119 +1,74 @@
-let importData = [];
 let monitoringData = [];
+let currentPage = 1; // Aktuelle Seite
+const recordsPerPage = 20; // Anzahl der Datensätze pro Seite
 
-function fetchImportData() {
-    const savedData = localStorage.getItem('importData');
+function fetchMonitoringData() {
+    const savedData = localStorage.getItem('monitoringData');
     if (savedData) {
-        importData = JSON.parse(savedData);
-        populateTournaments();
+        monitoringData = JSON.parse(savedData);
+        sortMonitoringData();
+        renderResultsTable();
     }
 }
 
-function populateTournaments() {
-    const tournamentSelect = document.getElementById('tournament');
-    const tournaments = [...new Set(importData.map(item => item.tournament))];
-    tournaments.forEach(tournament => {
-        const option = document.createElement('option');
-        option.value = tournament;
-        option.textContent = tournament;
-        tournamentSelect.appendChild(option);
+function sortMonitoringData() {
+    monitoringData.sort((a, b) => {
+        const totalA = a.scores.reduce((sum, score) => sum + score, 0) - Math.max(...a.scores) - Math.min(...a.scores);
+        const totalB = b.scores.reduce((sum, score) => sum + score, 0) - Math.max(...b.scores) - Math.min(...b.scores);
+        return totalB - totalA;
     });
 }
 
-function updateAgeGroups() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroupSelect = document.getElementById('ageGroup');
-    ageGroupSelect.disabled = !tournament;
-    ageGroupSelect.innerHTML = '<option value="">Wählen...</option>';
+function renderResultsTable() {
+    const tableBody = document.querySelector('#resultsTable tbody');
+    tableBody.innerHTML = '';
 
-    if (tournament) {
-        const ageGroups = [...new Set(importData.filter(item => item.tournament === tournament).map(item => item.ageGroup))];
-        ageGroups.forEach(ageGroup => {
-            const option = document.createElement('option');
-            option.value = ageGroup;
-            option.textContent = ageGroup;
-            ageGroupSelect.appendChild(option);
-        });
+    const startIndex = (currentPage - 1) * recordsPerPage;
+    const endIndex = Math.min(startIndex + recordsPerPage, monitoringData.length);
+
+    monitoringData.slice(startIndex, endIndex).forEach((entry, index) => {
+        const row = document.createElement('tr');
+        const total = entry.scores.reduce((sum, score) => sum + score, 0);
+        const points = total - Math.max(...entry.scores) - Math.min(...entry.scores);
+        const minScore = Math.min(...entry.scores);
+        const maxScore = Math.max(...entry.scores);
+
+        let placeClass = '';
+        if (startIndex + index === 0) placeClass = 'gold';
+        else if (startIndex + index === 1) placeClass = 'silver';
+        else if (startIndex + index === 2) placeClass = 'bronze';
+
+        row.innerHTML = `
+            <td class="${placeClass}">${startIndex + index + 1}</td>
+            <td>${points}</td>
+            <td>${total}</td>
+            ${entry.scores.map((score, i) => `<td class="${score === minScore || score === maxScore ? 'streicher' : ''}">WR${i + 1}: ${score}</td>`).join('')}
+            <td>${entry.startNumber}</td>
+            <td>${entry.club}</td>
+            <td>${entry.starterName}</td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+
+    document.getElementById('currentPage').innerText = currentPage;
+    document.getElementById('totalPages').innerText = Math.ceil(monitoringData.length / recordsPerPage);
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === Math.ceil(monitoringData.length / recordsPerPage);
+}
+
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderResultsTable();
     }
 }
 
-function updateDisciplines() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroup = document.getElementById('ageGroup').value;
-    const disciplineSelect = document.getElementById('discipline');
-    disciplineSelect.disabled = !ageGroup;
-    disciplineSelect.innerHTML = '<option value="">Wählen...</option>';
-
-    if (ageGroup) {
-        const disciplines = [...new Set(importData.filter(item => item.tournament === tournament && item.ageGroup === ageGroup).map(item => item.discipline))];
-        disciplines.forEach(discipline => {
-            const option = document.createElement('option');
-            option.value = discipline;
-            option.textContent = discipline;
-            disciplineSelect.appendChild(option);
-        });
+function nextPage() {
+    if (currentPage < Math.ceil(monitoringData.length / recordsPerPage)) {
+        currentPage++;
+        renderResultsTable();
     }
-}
-
-function updateStartNumbers() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroup = document.getElementById('ageGroup').value;
-    const discipline = document.getElementById('discipline').value;
-    const startNumberSelect = document.getElementById('startNumber');
-    startNumberSelect.disabled = !discipline;
-    startNumberSelect.innerHTML = '<option value="">Wählen...</option>';
-
-    if (discipline) {
-        const startNumbers = importData.filter(item => item.tournament === tournament && item.ageGroup === ageGroup && item.discipline === discipline).map(item => item.startNumber);
-        startNumbers.forEach(startNumber => {
-            const option = document.createElement('option');
-            option.value = startNumber;
-            option.textContent = startNumber;
-            startNumberSelect.appendChild(option);
-        });
-    }
-}
-
-function updateStarterInfo() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroup = document.getElementById('ageGroup').value;
-    const discipline = document.getElementById('discipline').value;
-    const startNumber = document.getElementById('startNumber').value;
-
-    if (startNumber) {
-        const starter = importData.find(item => item.tournament === tournament && item.ageGroup === ageGroup && item.discipline === discipline && item.startNumber === startNumber);
-        if (starter) {
-            document.getElementById('club').value = starter.club;
-            document.getElementById('starterName').value = starter.starterName || '';
-        }
-    } else {
-        document.getElementById('club').value = '';
-        document.getElementById('starterName').value = '';
-    }
-}
-
-function saveEntry() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroup = document.getElementById('ageGroup').value;
-    const discipline = document.getElementById('discipline').value;
-    const startNumber = document.getElementById('startNumber').value;
-    const club = document.getElementById('club').value;
-    const starterName = document.getElementById('starterName').value;
-    const scores = Array.from(document.querySelectorAll('input[name="score"]')).map(input => parseInt(input.value) || 0);
-
-    const entry = {
-        tournament,
-        ageGroup,
-        discipline,
-        startNumber,
-        club,
-        starterName,
-        scores
-    };
-
-    monitoringData.push(entry);
-    localStorage.setItem('monitoringData', JSON.stringify(monitoringData));
-    alert('Eintrag gespeichert!');
 }
 
 function toggleMenu() {
@@ -122,9 +77,5 @@ function toggleMenu() {
 }
 
 window.onload = () => {
-    const savedMonitoringData = localStorage.getItem('monitoringData');
-    if (savedMonitoringData) {
-        monitoringData = JSON.parse(savedMonitoringData);
-    }
-    fetchImportData();
+    fetchMonitoringData();
 };

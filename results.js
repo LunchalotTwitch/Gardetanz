@@ -93,10 +93,19 @@ function applyFilters() {
 
 function sortFilteredData() {
     filteredData.sort((a, b) => {
-        const totalA = a.scores.reduce((sum, score) => sum + score, 0) - Math.max(...a.scores) - Math.min(...a.scores);
-        const totalB = b.scores.reduce((sum, score) => sum + score, 0) - Math.max(...b.scores) - Math.min(...b.scores);
+        const totalA = calculatePoints(a.scores);
+        const totalB = calculatePoints(b.scores);
         return totalB - totalA;
     });
+}
+
+function calculatePoints(scores) {
+    const sortedScores = [...scores].sort((a, b) => a - b);
+    const uniqueScores = [...new Set(sortedScores)];
+    const minScore = uniqueScores.shift();
+    const maxScore = uniqueScores.pop();
+    const remainingScores = scores.filter(score => score !== minScore && score !== maxScore);
+    return remainingScores.reduce((sum, score) => sum + score, 0);
 }
 
 function renderResultsTable() {
@@ -109,9 +118,11 @@ function renderResultsTable() {
     filteredData.slice(startIndex, endIndex).forEach((entry, index) => {
         const row = document.createElement('tr');
         const total = entry.scores.reduce((sum, score) => sum + score, 0);
-        const points = total - Math.max(...entry.scores) - Math.min(...entry.scores);
-        const minScore = Math.min(...entry.scores);
-        const maxScore = Math.max(...entry.scores);
+        const points = calculatePoints(entry.scores);
+        const sortedScores = [...entry.scores].sort((a, b) => a - b);
+        const uniqueScores = [...new Set(sortedScores)];
+        const minScore = uniqueScores.shift();
+        const maxScore = uniqueScores.pop();
 
         let placeClass = '';
         if (startIndex + index === 0) placeClass = 'gold';
@@ -122,7 +133,7 @@ function renderResultsTable() {
             <td class="${placeClass}">${startIndex + index + 1}</td>
             <td>${points}</td>
             <td>${total}</td>
-            ${entry.scores.map(score => `<td class="${score === minScore || score === maxScore ? 'streicher' : ''}">${score}</td>`).join('')}
+            ${entry.scores.map(score => `<td class="${(score === minScore || score === maxScore) ? 'streicher' : ''}">${score}</td>`).join('')}
             <td>${entry.startNumber}</td>
             <td>${entry.club}</td>
             <td>${entry.starterName}</td>
