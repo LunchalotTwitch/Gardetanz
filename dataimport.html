@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenimport</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="menu-button">
@@ -14,6 +13,7 @@
     <div id="menu" class="menu">
         <ul>
             <li><a href="index.html">Monitoringseite</a></li>
+            <li><a href="references.html">Referenzseite</a></li>
             <li><a href="results.html">Ergebnisse</a></li>
             <li><a href="dataimport.html">Datenimport</a></li>
             <li><a href="admin.html">Admin Seite</a></li>
@@ -21,33 +21,30 @@
     </div>
     <div class="container">
         <h1>Datenimport</h1>
-        <div class="import-container">
-            <input type="file" id="fileInput" accept=".xlsx">
-            <button class="import-button green-button" onclick="importExcelData()">Jetzt importieren</button>
-            <button class="delete-all-button red-button" onclick="deleteAllImportData()">Importierte Liste löschen</button>
-        </div>
-        <div class="pagination">
-            <button id="prevPage" onclick="prevPage()">⬅️</button>
-            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
-            <button id="nextPage" onclick="nextPage()">➡️</button>
-        </div>
-        <h2>Importierte Daten</h2>
-        <table id="importTable">
+        <input type="file" id="fileInput" />
+        <button onclick="importData()" class="green-button">Jetzt importieren</button>
+        <button onclick="clearData()" class="red-button">Referenzliste löschen</button>
+        <table id="importedData">
             <thead>
                 <tr>
+                    <th>Turnier</th>
                     <th>Datum</th>
                     <th>Altersklasse</th>
                     <th>Disziplin</th>
-                    <th>Startnr.</th>
-                    <th>Turnier</th>
+                    <th>Startnr</th>
                     <th>Verein</th>
                     <th>Name</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Importierte Daten werden hier hinzugefügt -->
+                <!-- Imported data will be displayed here -->
             </tbody>
         </table>
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">⬅️</button>
+            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
+            <button id="nextPage" onclick="nextPage()">➡️</button>
+        </div>
     </div>
     <script src="dataimport.js"></script>
 </body>
