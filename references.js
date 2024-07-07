@@ -5,14 +5,27 @@ function saveReference() {
     const form = document.getElementById('referenceForm');
     const formData = new FormData(form);
 
+    const tournament = formData.get('tournament');
+    const date = formData.get('date');
+    const ageGroup = formData.get('ageGroup');
+    const discipline = formData.get('discipline');
     const startNumber = formData.get('startNumber');
+    const club = formData.get('club');
+    const starterName = formData.get('starterName');
+
+    // Validate that all fields are filled
+    if (!tournament || !date || !ageGroup || !discipline || !startNumber || !club || !starterName) {
+        alert("Bitte füllen Sie alle Felder aus.");
+        return;
+    }
+
     referenceData[startNumber] = {
-        tournament: formData.get('tournament'),
-        date: formData.get('date'),
-        ageGroup: formData.get('ageGroup'),
-        discipline: formData.get('discipline'),
-        club: formData.get('club'),
-        starterName: formData.get('starterName')
+        tournament: tournament,
+        date: date,
+        ageGroup: ageGroup,
+        discipline: discipline,
+        club: club,
+        starterName: starterName
     };
 
     updateReferenceTable();
@@ -81,6 +94,9 @@ function importFromExcel() {
 
             for (let i = 1; i < worksheet.length; i++) {
                 const row = worksheet[i];
+                if (row.length < 7 || row.includes("")) {
+                    continue; // Skip rows with missing data
+                }
                 referenceData[row[4]] = {
                     tournament: row[0],
                     date: row[1],
@@ -96,6 +112,18 @@ function importFromExcel() {
             updateReferenceTable();
         };
         reader.readAsArrayBuffer(file);
+    }
+}
+
+// Function to prompt for password and delete references
+function promptDeleteReferences() {
+    const password = prompt("Bitte geben Sie das Passwort ein, um die Referenzliste zu löschen:");
+    if (password === "922766") {
+        referenceData = {};
+        updateReferenceTable();
+        alert("Referenzliste wurde gelöscht.");
+    } else {
+        alert("Falsches Passwort. Die Referenzliste wurde nicht gelöscht.");
     }
 }
 

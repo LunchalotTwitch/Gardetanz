@@ -21,6 +21,7 @@
         <form id="referenceForm">
             <label for="tournament">Turnier:</label>
             <select id="tournament" name="tournament">
+                <option value="">Wählen...</option>
                 <option value="Turnier 1">Turnier 1</option>
                 <option value="Turnier 2">Turnier 2</option>
             </select>
@@ -49,6 +50,7 @@
         <h2>Referenzliste</h2>
         <input type="file" id="fileInput" accept=".xlsx, .xls">
         <button type="button" onclick="importFromExcel()">Importieren</button>
+        <button type="button" onclick="promptDeleteReferences()">Referenzliste löschen</button>
         <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
         
         <table id="referenceTable">
