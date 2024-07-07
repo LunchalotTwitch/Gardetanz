@@ -14,54 +14,76 @@ function fetchMonitoringData() {
 
 function populateFilters() {
     const tournaments = [...new Set(monitoringData.map(item => item.tournament))];
+    const ageGroups = [...new Set(monitoringData.map(item => item.ageGroup))];
+    const disciplines = [...new Set(monitoringData.map(item => item.discipline))];
+    const clubs = [...new Set(monitoringData.map(item => item.club))];
+    const names = [...new Set(monitoringData.map(item => item.starterName))];
+
     const tournamentSelect = document.getElementById('filterTournament');
+    const ageGroupSelect = document.getElementById('filterAgeGroup');
+    const disciplineSelect = document.getElementById('filterDiscipline');
+    const clubSelect = document.getElementById('filterClub');
+    const nameSelect = document.getElementById('filterName');
+
     tournaments.forEach(tournament => {
         const option = document.createElement('option');
         option.value = tournament;
         option.textContent = tournament;
         tournamentSelect.appendChild(option);
     });
+
+    ageGroups.forEach(ageGroup => {
+        const option = document.createElement('option');
+        option.value = ageGroup;
+        option.textContent = ageGroup;
+        ageGroupSelect.appendChild(option);
+    });
+
+    disciplines.forEach(discipline => {
+        const option = document.createElement('option');
+        option.value = discipline;
+        option.textContent = discipline;
+        disciplineSelect.appendChild(option);
+    });
+
+    clubs.forEach(club => {
+        const option = document.createElement('option');
+        option.value = club;
+        option.textContent = club;
+        clubSelect.appendChild(option);
+    });
+
+    names.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        nameSelect.appendChild(option);
+    });
 }
 
 function applyFilters() {
     const tournament = document.getElementById('filterTournament').value;
-    const ageGroupSelect = document.getElementById('filterAgeGroup');
-    const disciplineSelect = document.getElementById('filterDiscipline');
-
-    ageGroupSelect.innerHTML = '<option value="">Alle</option>';
-    disciplineSelect.innerHTML = '<option value="">Alle</option>';
-    ageGroupSelect.disabled = !tournament;
-    disciplineSelect.disabled = true;
+    const ageGroup = document.getElementById('filterAgeGroup').value;
+    const discipline = document.getElementById('filterDiscipline').value;
+    const club = document.getElementById('filterClub').value;
+    const name = document.getElementById('filterName').value;
 
     let data = monitoringData;
 
     if (tournament) {
         data = data.filter(item => item.tournament === tournament);
-        const ageGroups = [...new Set(data.map(item => item.ageGroup))];
-        ageGroups.forEach(ageGroup => {
-            const option = document.createElement('option');
-            option.value = ageGroup;
-            option.textContent = ageGroup;
-            ageGroupSelect.appendChild(option);
-        });
     }
-
-    const ageGroup = ageGroupSelect.value;
     if (ageGroup) {
         data = data.filter(item => item.ageGroup === ageGroup);
-        disciplineSelect.disabled = false;
-        const disciplines = [...new Set(data.map(item => item.discipline))];
-        disciplines.forEach(discipline => {
-            const option = document.createElement('option');
-            option.value = discipline;
-            option.textContent = discipline;
-            disciplineSelect.appendChild(option);
-        });
     }
-
-    const discipline = disciplineSelect.value;
     if (discipline) {
         data = data.filter(item => item.discipline === discipline);
+    }
+    if (club) {
+        data = data.filter(item => item.club === club);
+    }
+    if (name) {
+        data = data.filter(item => item.starterName === name);
     }
 
     filteredData = data;

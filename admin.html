@@ -21,6 +21,37 @@
     </div>
     <div class="container">
         <h1>Admin Seite</h1>
+        <div class="filter-group">
+            <label for="filterTournament">Turnier:</label>
+            <select id="filterTournament" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterAgeGroup">Altersklasse:</label>
+            <select id="filterAgeGroup" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterDiscipline">Disziplin:</label>
+            <select id="filterDiscipline" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterClub">Verein:</label>
+            <select id="filterClub" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filterName">Name:</label>
+            <select id="filterName" onchange="applyFilters()">
+                <option value="">Alle</option>
+            </select>
+        </div>
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">⬅️</button>
+            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
+            <button id="nextPage" onclick="nextPage()">➡️</button>
+        </div>
         <table id="adminTable">
             <thead>
                 <tr>
