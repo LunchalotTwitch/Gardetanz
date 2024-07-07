@@ -41,7 +41,7 @@ function importData() {
             const workbook = XLSX.read(data, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-            
+
             referenceData = {}; // Reset reference data
             rows.forEach((row, index) => {
                 if (index === 0) return; // Skip header row
