@@ -55,6 +55,8 @@ function displayData() {
 
     document.getElementById('currentPage').innerText = currentPage;
     document.getElementById('totalPages').innerText = Math.ceil(importData.length / recordsPerPage);
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === Math.ceil(importData.length / recordsPerPage);
 }
 
 function prevPage() {
