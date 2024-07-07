@@ -62,12 +62,6 @@ h1, h2 {
     text-align: center;
 }
 
-.import-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 button {
     padding: 10px;
     background-color: #007BFF;
@@ -87,16 +81,6 @@ button.import-button {
 
 button.import-button:hover {
     background-color: #218838;
-}
-
-button.delete-button {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-}
-
-button.delete-button:hover {
-    background-color: #ff1a1a;
 }
 
 button.delete-all-button {
@@ -128,18 +112,6 @@ th, td {
 
 th {
     background-color: #333;
-}
-
-td button.delete-button {
-    background-color: transparent;
-    color: #ff4d4d;
-    border: none;
-    cursor: pointer;
-}
-
-td button.delete-button:hover {
-    color: #ff1a1a;
-    text-decoration: underline;
 }
 
 .highlight {

@@ -241,7 +241,7 @@ function updateResultsTable() {
 
         row.innerHTML = `
             <td class="${placeClass}">${index + 1}</td>
-            <td>${entry.date}</td> <!-- Add date column -->
+            <td>${entry.date}</td>
             <td>${entry.tournament}</td>
             <td>${entry.ageGroup}</td>
             <td>${entry.discipline}</td>

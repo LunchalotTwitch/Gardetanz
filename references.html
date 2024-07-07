@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referenzinformationen</title>
+    <title>Referenzseite</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,18 +14,16 @@
         <ul>
             <li><a href="index.html">Monitoringseite</a></li>
             <li><a href="references.html">Referenzseite</a></li>
+            <li><a href="results.html">Ergebnisse</a></li>
         </ul>
     </div>
     <div class="container">
-        <h1>Referenzinformationen</h1>
-        <h2>Referenzliste</h2>
+        <h1>Referenzseite</h1>
         <div class="import-container">
-            <input type="file" id="fileInput" accept=".xlsx, .xls">
-            <button type="button" class="import-button" onclick="importFromExcel()">Jetzt importieren</button>
+            <input type="file" id="fileInput">
+            <button class="import-button" onclick="importData()">Jetzt importieren</button>
         </div>
-        <button type="button" class="delete-all-button" onclick="deleteAllReferences()">Referenzliste löschen</button>
-        <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
-        
+        <h2>Referenzliste</h2>
         <table id="referenceTable">
             <thead>
                 <tr>
@@ -40,11 +38,11 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Referenzen werden hier hinzugefügt -->
+                <!-- Referenzdaten werden hier hinzugefügt -->
             </tbody>
         </table>
+        <button class="delete-all-button" onclick="deleteAllReferences()">Referenzliste löschen</button>
     </div>
     <script src="references.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
 </body>
 </html>

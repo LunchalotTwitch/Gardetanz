@@ -1,7 +1,6 @@
 let referenceData = {}; // Object to store reference data
 let entries = []; // Array to store entries
 
-// Function to fetch reference data from localStorage
 function fetchReferenceData() {
     const savedData = localStorage.getItem('referenceData');
     if (savedData) {
@@ -9,7 +8,6 @@ function fetchReferenceData() {
     }
 }
 
-// Function to fetch entries from localStorage
 function fetchEntries() {
     const savedEntries = localStorage.getItem('entries');
     if (savedEntries) {
@@ -17,7 +15,6 @@ function fetchEntries() {
     }
 }
 
-// Function to populate filter options
 function populateFilters() {
     const tournaments = new Set();
     const ageGroups = new Set();
@@ -76,7 +73,6 @@ function populateFilters() {
     });
 }
 
-// Function to update the results table based on filters
 function updateResultsTable() {
     const filterDate = document.getElementById('filterDate').value;
     const filterTournament = document.getElementById('filterTournament').value;
@@ -118,6 +114,7 @@ function updateResultsTable() {
         const scoresHtml = Array.from({ length: 7 }, (_, i) => {
             const score = entry.scores[i] || '';
             const isLowest = score === entry.lowestScore;
+
             const isHighest = score === entry.highestScore;
             const className = isLowest || isHighest ? 'highlight' : '';
             return `<td class="${className}">${score}</td>`;
@@ -146,13 +143,11 @@ function updateResultsTable() {
     });
 }
 
-// Function to toggle the menu
 function toggleMenu() {
     const menu = document.getElementById('menu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Fetch reference data and entries on page load
 window.onload = () => {
     fetchReferenceData();
     fetchEntries();
