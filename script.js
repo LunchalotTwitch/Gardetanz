@@ -31,7 +31,7 @@ function updateAgeGroups() {
         option.textContent = ageGroup;
         ageGroupSelect.appendChild(option);
     });
-    ageGroupSelect.disabled = false;
+    ageGroupSelect.disabled = ageGroups.length === 0;
 }
 
 function updateDisciplines() {
@@ -46,7 +46,7 @@ function updateDisciplines() {
         option.textContent = discipline;
         disciplineSelect.appendChild(option);
     });
-    disciplineSelect.disabled = false;
+    disciplineSelect.disabled = disciplines.length === 0;
 }
 
 function updateStartNumbers() {
@@ -62,7 +62,7 @@ function updateStartNumbers() {
         option.textContent = startNumber;
         startNumberSelect.appendChild(option);
     });
-    startNumberSelect.disabled = false;
+    startNumberSelect.disabled = startNumbers.length === 0;
 }
 
 function updateStarterInfo() {
