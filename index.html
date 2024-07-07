@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoringseite</title>
+    <title>Turnier Monitoring</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,35 +14,107 @@
         <ul>
             <li><a href="index.html">Monitoringseite</a></li>
             <li><a href="references.html">Referenzseite</a></li>
-            <li><a href="results.html">Ergebnisse</a></li>
-            <li><a href="dataimport.html">Datenimport</a></li>
         </ul>
     </div>
     <div class="container">
-        <h1>Monitoringseite</h1>
-        <div class="pagination">
-            <button id="prevPage" onclick="prevPage()">⬅️</button>
-            <span>Seite <span id="currentPage"></span> von <span id="totalPages"></span></span>
-            <button id="nextPage" onclick="nextPage()">➡️</button>
-        </div>
-        <h2>Monitoring-Daten</h2>
-        <table id="monitoringTable">
+        <h1>Turnier Monitoring</h1>
+        <form id="entryForm">
+            <label for="tournament">Turnier:</label>
+            <select id="tournament" name="tournament" onchange="updateAgeGroups()">
+                <option value="">Wählen...</option>
+            </select>
+
+            <div class="form-group">
+                <div>
+                    <label for="ageGroup">Altersklasse:</label>
+                    <select id="ageGroup" name="ageGroup" onchange="updateDisciplines()" disabled>
+                        <option value="">Wählen...</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="discipline">Disziplin:</label>
+                    <select id="discipline" name="discipline" onchange="updateStartNumbers()" disabled>
+                        <option value="">Wählen...</option>
+                    </select>
+                </div>
+            </div>
+
+            <label for="startNumber">Startnummer:</label>
+            <select id="startNumber" name="startNumber" onchange="updateStarterInfo()" disabled>
+                <option value="">Wählen...</option>
+            </select>
+
+            <div class="form-group">
+                <div>
+                    <label for="club">Verein:</label>
+                    <input type="text" id="club" name="club" readonly>
+                </div>
+                <div>
+                    <label for="starterName">Name des Starters:</label>
+                    <input type="text" id="starterName" name="starterName" readonly>
+                </div>
+            </div>
+
+            <div class="form-group scores">
+                <div>
+                    <label for="score1">WR1:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+                <div>
+                    <label for="score2">WR2:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+            </div>
+            <div class="form-group scores">
+                <div>
+                    <label for="score3">WR3:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+                <div>
+                    <label for="score4">WR4:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+            </div>
+            <div class="form-group scores">
+                <div>
+                    <label for="score5">WR5:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+                <div>
+                    <label for="score6">WR6:</label>
+                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                </div>
+            </div>
+            <div class="form-group scores">
+                <label for="score7">WR7:</label>
+                <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+            </div>
+
+            <button type="button" onclick="saveEntry()">Eintrag speichern</button>
+        </form>
+        
+        <h2>Gesamtliste</h2>
+        <table id="resultsTable">
             <thead>
                 <tr>
-                    <th>Datum</th>
+                    <th>Platz</th>
+                    <th>Turnier</th>
                     <th>Altersklasse</th>
                     <th>Disziplin</th>
-                    <th>Startnr.</th>
-                    <th>Turnier</th>
+                    <th>Startnummer</th>
                     <th>Verein</th>
-                    <th>Name</th>
+                    <th>Name des Starters</th>
+                    <th>Wertungen</th>
+                    <th>Streichwertungen</th>
+                    <th>Punktzahl</th>
+                    <th>Gesamtpunktzahl</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Monitoring-Daten werden hier hinzugefügt -->
+                <!-- Einträge werden hier hinzugefügt -->
             </tbody>
         </table>
     </div>
-    <script src="monitoring.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
