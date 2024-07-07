@@ -142,6 +142,11 @@ td button.delete-button:hover {
     text-decoration: underline;
 }
 
+.highlight {
+    background-color: red;
+    color: white;
+}
+
 @media (max-width: 600px) {
     .form-group.scores {
         flex-direction: column;
