@@ -10,10 +10,6 @@ function updateReferenceTable() {
         const row = document.createElement('tr');
         
         row.innerHTML = `
-            <td>${ref.tournament}</td>
-            <td>${ref.date}</td>
-            <td>${ref.ageGroup}</td>
-            <td>${ref.discipline}</td>
             <td>${startNumber}</td>
             <td>${ref.club}</td>
             <td>${ref.starterName}</td>
@@ -103,12 +99,4 @@ function importFromExcel() {
 // Function to format date to DD.MM.YYYY
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero based
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-}
-
-// Load data from localStorage on page load
-window.onload = loadFromLocalStorage;
-window.onbeforeunload = saveToLocalStorage;
+    const day = String(date.getDate()).padStart(
