@@ -41,7 +41,7 @@ function renderTable() {
             <td>${data.startNumber}</td>
             <td>${data.tournament}</td>
             <td>${data.club}</td>
-            <td>${data.starterName}</td>
+            <td>${data.starterName || ''}</td>
         `;
 
         tableBody.appendChild(row);
@@ -75,7 +75,7 @@ function importExcelData() {
                         discipline: row[3].toString().trim(),
                         startNumber: row[4].toString().trim(),
                         club: row[5].toString().trim(),
-                        starterName: row[6].toString().trim()
+                        starterName: row[6] ? row[6].toString().trim() : '' // Handle optional name field
                     });
                 }
             });
