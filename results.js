@@ -25,16 +25,14 @@ function populateFilters() {
     const clubs = new Set();
     const dates = new Set();
 
-    entries.forEach(entry => {
-        const reference = referenceData[entry.startNumber];
-        if (reference) {
-            tournaments.add(reference.tournament);
-            ageGroups.add(reference.ageGroup);
-            disciplines.add(reference.discipline);
-            clubs.add(reference.club);
-            dates.add(reference.date);
-        }
-    });
+    for (const key in referenceData) {
+        const reference = referenceData[key];
+        tournaments.add(reference.tournament);
+        ageGroups.add(reference.ageGroup);
+        disciplines.add(reference.discipline);
+        clubs.add(reference.club);
+        dates.add(reference.date);
+    }
 
     const tournamentSelect = document.getElementById('filterTournament');
     const ageGroupSelect = document.getElementById('filterAgeGroup');
@@ -89,10 +87,8 @@ function updateResultsTable() {
     const tableBody = document.querySelector('#resultsTable tbody');
     tableBody.innerHTML = '';
 
-    const filteredEntries = entries.filter(entry => {
-        const reference = referenceData[entry.startNumber];
-        if (!reference) return false;
-
+    const filteredKeys = Object.keys(referenceData).filter(key => {
+        const reference = referenceData[key];
         return (!filterDate || reference.date === filterDate) &&
                (!filterTournament || reference.tournament === filterTournament) &&
                (!filterAgeGroup || reference.ageGroup === filterAgeGroup) &&
@@ -100,13 +96,27 @@ function updateResultsTable() {
                (!filterClub || reference.club === filterClub);
     });
 
+    const filteredEntries = filteredKeys.map(key => {
+        const reference = referenceData[key];
+        const entry = entries.find(e => e.startNumber === key) || {
+            scores: [],
+            pointScore: 0,
+            totalScore: 0
+        };
+
+        return {
+            ...reference,
+            ...entry
+        };
+    });
+
     filteredEntries.sort((a, b) => b.pointScore - a.pointScore);
 
     filteredEntries.forEach((entry, index) => {
-        const reference = referenceData[entry.startNumber];
         const row = document.createElement('tr');
 
-        const scoresHtml = entry.scores.map((score, i) => {
+        const scoresHtml = Array.from({ length: 7 }, (_, i) => {
+            const score = entry.scores[i] || '';
             const isLowest = score === entry.lowestScore;
             const isHighest = score === entry.highestScore;
             const className = isLowest || isHighest ? 'highlight' : '';
@@ -120,13 +130,13 @@ function updateResultsTable() {
 
         row.innerHTML = `
             <td class="${placeClass}">${index + 1}</td>
-            <td>${reference.date}</td>
-            <td>${reference.tournament}</td>
-            <td>${reference.ageGroup}</td>
-            <td>${reference.discipline}</td>
+            <td>${entry.date}</td>
+            <td>${entry.tournament}</td>
+            <td>${entry.ageGroup}</td>
+            <td>${entry.discipline}</td>
             <td>${entry.startNumber}</td>
-            <td>${reference.club}</td>
-            <td>${reference.starterName}</td>
+            <td>${entry.club}</td>
+            <td>${entry.starterName}</td>
             ${scoresHtml}
             <td>${entry.pointScore}</td>
             <td>${entry.totalScore}</td>
