@@ -46,9 +46,9 @@ function displayData() {
             <td>${item.Datum}</td>
             <td>${item.Altersklasse}</td>
             <td>${item.Disziplin}</td>
-            <td>${item.Startnr}</td>
+            <td>${item.Startnummer}</td>
             <td>${item.Verein}</td>
-            <td>${item.Name}</td>
+            <td>${item['Name des Starters']}</td>
         `;
         tableBody.appendChild(row);
     });
