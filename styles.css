@@ -62,10 +62,15 @@ h1, h2 {
     text-align: center;
 }
 
-.import-container {
+.form-group {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.scores {
+    display: flex;
+    justify-content: space-between;
 }
 
 button {
@@ -73,6 +78,7 @@ button {
     border: none;
     cursor: pointer;
     font-size: 1em;
+    margin-top: 20px;
 }
 
 .green-button {
@@ -144,7 +150,10 @@ th {
 }
 
 @media (max-width: 600px) {
-    .import-container {
+    .form-group {
+        flex-direction: column;
+    }
+    .scores {
         flex-direction: column;
     }
 }

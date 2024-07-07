@@ -22,20 +22,20 @@
         <h1>Turnier Monitoring</h1>
         <form id="entryForm">
             <label for="tournament">Turnier:</label>
-            <select id="tournament" name="tournament" onchange="updateAgeGroups(); updateResultsTable();">
+            <select id="tournament" name="tournament" onchange="updateAgeGroups()">
                 <option value="">Wählen...</option>
             </select>
 
             <div class="form-group">
                 <div>
                     <label for="ageGroup">Altersklasse:</label>
-                    <select id="ageGroup" name="ageGroup" onchange="updateDisciplines(); updateResultsTable();" disabled>
+                    <select id="ageGroup" name="ageGroup" onchange="updateDisciplines()" disabled>
                         <option value="">Wählen...</option>
                     </select>
                 </div>
                 <div>
                     <label for="discipline">Disziplin:</label>
-                    <select id="discipline" name="discipline" onchange="updateStartNumbers(); updateResultsTable();" disabled>
+                    <select id="discipline" name="discipline" onchange="updateStartNumbers()" disabled>
                         <option value="">Wählen...</option>
                     </select>
                 </div>
@@ -60,59 +60,40 @@
             <div class="form-group scores">
                 <div>
                     <label for="score1">WR1:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score1" name="score" min="10" max="100" step="10">
                 </div>
                 <div>
                     <label for="score2">WR2:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score2" name="score" min="10" max="100" step="10">
                 </div>
             </div>
             <div class="form-group scores">
                 <div>
                     <label for="score3">WR3:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score3" name="score" min="10" max="100" step="10">
                 </div>
                 <div>
                     <label for="score4">WR4:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score4" name="score" min="10" max="100" step="10">
                 </div>
             </div>
             <div class="form-group scores">
                 <div>
                     <label for="score5">WR5:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score5" name="score" min="10" max="100" step="10">
                 </div>
                 <div>
                     <label for="score6">WR6:</label>
-                    <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                    <input type="number" id="score6" name="score" min="10" max="100" step="10">
                 </div>
             </div>
             <div class="form-group scores">
                 <label for="score7">WR7:</label>
-                <input type="number" name="score" min="10" max="100" step="10" onkeydown="return nextInput(event)">
+                <input type="number" id="score7" name="score" min="10" max="100" step="10">
             </div>
 
             <button type="button" onclick="saveEntry()">Eintrag speichern</button>
         </form>
-        
-        <h2 id="resultsTitle" style="display: none;">Gesamtliste</h2>
-        <table id="resultsTable" style="display: none;">
-            <thead>
-                <tr>
-                    <th>Platz</th>
-                    <th>Punktzahl</th>
-                    <th>Gesamt</th>
-                    <th>Streicher</th>
-                    <th>Startnummer</th>
-                    <th>Verein</th>
-                    <th>Name</th>
-                    <th>Wertungen</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Einträge werden hier hinzugefügt -->
-            </tbody>
-        </table>
     </div>
     <script src="script.js"></script>
 </body>

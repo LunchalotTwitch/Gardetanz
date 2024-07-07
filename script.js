@@ -92,17 +92,6 @@ function updateStarterInfo() {
     }
 }
 
-function nextInput(event) {
-    if (event.key === 'Enter') {
-        const inputs = Array.from(document.querySelectorAll('input[name="score"]'));
-        const index = inputs.indexOf(event.target);
-        if (index >= 0 && index < inputs.length - 1) {
-            inputs[index + 1].focus();
-            event.preventDefault();
-        }
-    }
-}
-
 function saveEntry() {
     const tournament = document.getElementById('tournament').value;
     const ageGroup = document.getElementById('ageGroup').value;
@@ -124,43 +113,7 @@ function saveEntry() {
 
     monitoringData.push(entry);
     localStorage.setItem('monitoringData', JSON.stringify(monitoringData));
-    updateResultsTable();
-}
-
-function updateResultsTable() {
-    const tournament = document.getElementById('tournament').value;
-    const ageGroup = document.getElementById('ageGroup').value;
-    const discipline = document.getElementById('discipline').value;
-
-    const filteredData = monitoringData.filter(entry => entry.tournament === tournament && entry.ageGroup === ageGroup && entry.discipline === discipline);
-
-    const resultsTable = document.getElementById('resultsTable');
-    const resultsTitle = document.getElementById('resultsTitle');
-    resultsTable.style.display = filteredData.length ? 'table' : 'none';
-    resultsTitle.style.display = filteredData.length ? 'block' : 'none';
-
-    const tableBody = resultsTable.querySelector('tbody');
-    tableBody.innerHTML = '';
-
-    filteredData.forEach((entry, index) => {
-        const row = document.createElement('tr');
-
-        const total = entry.scores.reduce((sum, score) => sum + score, 0);
-        const points = total - Math.max(...entry.scores) - Math.min(...entry.scores);
-
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${points}</td>
-            <td>${total}</td>
-            <td>${Math.min(...entry.scores)}, ${Math.max(...entry.scores)}</td>
-            <td>${entry.startNumber}</td>
-            <td>${entry.club}</td>
-            <td>${entry.starterName}</td>
-            <td>${entry.scores.join(', ')}</td>
-        `;
-
-        tableBody.appendChild(row);
-    });
+    alert('Eintrag gespeichert!');
 }
 
 function toggleMenu() {
