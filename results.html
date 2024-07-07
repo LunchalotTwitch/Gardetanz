@@ -20,6 +20,9 @@
     <div class="container">
         <h1>Ergebnisse</h1>
         <form id="filterForm">
+            <label for="filterDate">Datum:</label>
+            <input type="date" id="filterDate" name="filterDate" onchange="updateResultsTable()">
+
             <label for="filterTournament">Turnier:</label>
             <select id="filterTournament" name="filterTournament" onchange="updateResultsTable()">
                 <option value="">Alle</option>
@@ -45,6 +48,8 @@
         <table id="resultsTable">
             <thead>
                 <tr>
+                    <th>Platz</th>
+                    <th>Datum</th>
                     <th>Turnier</th>
                     <th>Altersklasse</th>
                     <th>Disziplin</th>
@@ -60,7 +65,6 @@
                     <th>WR7</th>
                     <th>Punktzahl</th>
                     <th>Gesamt</th>
-					<th>Platz</th>
                 </tr>
             </thead>
             <tbody>
